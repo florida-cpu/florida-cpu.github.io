@@ -3,335 +3,210 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mover Quote Calculator</title>
+  <title>Muscle For Hire Movers — Quote Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:        #0f1117;
-      --surface:   #181c26;
-      --border:    #2a2f3d;
-      --accent:    #f5a623;
-      --accent2:   #e8431a;
-      --text:      #eef0f5;
-      --muted:     #7a8099;
-      --green:     #2ecc71;
-      --radius:    6px;
-      --mono:      'DM Mono', monospace;
-      --sans:      'DM Sans', sans-serif;
-      --display:   'Barlow Condensed', sans-serif;
-    }
+   :root {
+  --blue:      #1E52D8;
+  --blue-lt:   #3B6EF0;
+  --blue-dk:   #1340B0;
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-      padding: 0;
-    }
+  --navy:      #ffffff;   /* MAIN BACKGROUND NOW WHITE */
+  --surface:   #f8fafc;   /* cards */
+  --surface2:  #eef3fb;   /* headers */
+  --border:    #dbe3f0;
 
-    /* === HEADER === */
+  --white:     #0b1424;   /* text now dark */
+  --off-white: #1e293b;
+  --muted:     #64748b;
+
+  --green:     #16a34a;
+  --red:       #dc2626;
+
+  --radius:    8px;
+  --mono:      'DM Mono', monospace;
+  --body:      'Barlow', sans-serif;
+  --display:   'Bebas Neue', sans-serif;
+}
+
+    body { background: var(--navy); color: var(--off-white); font-family: var(--body); min-height: 100vh; }
+
+    /* HEADER */
     header {
-      background: var(--surface);
-      border-bottom: 2px solid var(--accent);
-      padding: 18px 32px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      background: #070e1a;
+      border-bottom: 3px solid var(--blue);
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 74px;
     }
-    .logo-badge {
-      width: 42px; height: 42px;
-      background: var(--accent);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--display);
-      font-size: 22px; font-weight: 800;
-      color: #000;
-      flex-shrink: 0;
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-wrap img { height: 60px; width: auto; display: block; }
+    .header-title .name {
+      font-family: var(--display); font-size: 24px; letter-spacing: 0.04em;
+      color: var(--white); line-height: 1;
     }
-    .logo-text { font-family: var(--display); font-size: 26px; font-weight: 700; letter-spacing: 0.03em; }
-    .logo-text span { color: var(--accent); }
-    .header-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+    .header-title .sub {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--blue-lt); margin-top: 3px;
+    }
+    .header-rate {
+      font-family: var(--mono); font-size: 12px; color: var(--blue-lt);
+      border: 1px solid var(--border); padding: 5px 14px; border-radius: 20px;
+    }
 
-    /* === LAYOUT === */
+    /* LAYOUT */
     .wrapper {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 36px 24px 60px;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
+      max-width: 980px; margin: 0 auto;
+      padding: 36px 24px 72px;
+      display: grid; grid-template-columns: 1fr 340px; gap: 28px;
       align-items: start;
     }
 
-    /* === CARDS === */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
+    /* PAGE TITLE */
+    .page-title {
+      font-family: var(--display); font-size: 34px; letter-spacing: 0.06em;
+      color: var(--white); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .card-header {
-      padding: 14px 22px;
-      border-bottom: 1px solid var(--border);
+    .page-title::before {
+      content: ''; display: block; width: 4px; height: 30px;
+      background: var(--blue); border-radius: 2px; flex-shrink: 0;
+    }
+
+    /* CARD */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .card-hd {
+      background: var(--surface2); padding: 13px 22px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
     }
-    .card-header h2 {
-      font-family: var(--display);
-      font-size: 18px; font-weight: 700;
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
-    .card-num {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #000;
-      font-size: 12px; font-weight: 700;
+    .card-hd h2 { font-family: var(--display); font-size: 19px; letter-spacing: 0.07em; color: var(--white); }
+    .step-dot {
+      width: 26px; height: 26px; background: var(--blue); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      font-family: var(--display); font-size: 14px; color: #fff; flex-shrink: 0;
     }
-    .card-body { padding: 22px; }
+    .rate-pill { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--blue-lt); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+    .card-body { padding: 24px; }
 
-    /* === FORM FIELDS === */
-    .field { margin-bottom: 20px; }
+    /* FIELDS */
+    .field { margin-bottom: 22px; }
     .field:last-child { margin-bottom: 0; }
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
+    label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 
     input[type="number"], select {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 16px;
-      padding: 11px 14px;
-      outline: none;
-      transition: border-color 0.18s;
-      appearance: none;
-      -webkit-appearance: none;
+      width: 100%; background: var(--navy); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--white); font-family: var(--mono);
+      font-size: 16px; padding: 12px 15px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none; appearance: none;
     }
     input[type="number"]:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(245,166,35,0.12);
+      border-color: var(--blue-lt); box-shadow: 0 0 0 3px rgba(30,82,216,0.18);
     }
     select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a8099' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%235d6e8a' d='M6 7L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer;
     }
     select option { background: var(--surface); }
 
-    .promo-row { display: flex; gap: 10px; }
-    .promo-row select { flex: 0 0 110px; }
-    .promo-row input { flex: 1; }
-
-    /* steppers */
-    .stepper {
-      display: flex; align-items: center; gap: 0;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .stepper button {
-      width: 44px; height: 44px;
-      background: var(--bg);
-      border: none;
-      color: var(--text);
-      font-size: 20px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      flex-shrink: 0;
-    }
-    .stepper button:hover { background: var(--accent); color: #000; }
-    .stepper input {
-      flex: 1;
-      border: none;
-      border-radius: 0;
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      text-align: center;
-      font-size: 17px;
-    }
+    .stepper { display: flex; align-items: stretch; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .stepper button { width: 48px; background: var(--surface2); border: none; color: var(--white); font-size: 22px; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+    .stepper button:hover { background: var(--blue); }
+    .stepper input { flex: 1; border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); border-radius: 0; background: var(--navy); text-align: center; font-size: 18px; padding: 12px 8px; color: var(--white); }
     .stepper input:focus { box-shadow: none; border-color: var(--border); }
 
-    /* hours display */
-    .hours-display {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 0;
-    }
-    .hours-label { font-size: 13px; color: var(--muted); }
-    .hours-val { font-family: var(--mono); font-size: 15px; color: var(--accent); font-weight: 500; }
+    .hours-meta { font-size: 12px; color: var(--muted); margin-top: 7px; display: flex; justify-content: space-between; }
+    .hours-meta em { font-style: normal; color: var(--blue-lt); font-family: var(--mono); }
 
-    /* === SUBTOTAL DISPLAY === */
-    .subtotal-block {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      margin-top: 24px;
-    }
-    .subtotal-breakdown { list-style: none; }
-    .subtotal-breakdown li {
-      display: flex; justify-content: space-between;
-      font-size: 13px; color: var(--muted);
-      padding: 5px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .subtotal-breakdown li:last-child { border-bottom: none; }
-    .subtotal-breakdown li .val { font-family: var(--mono); color: var(--text); }
-    .subtotal-breakdown li.total-row {
-      font-size: 15px; font-weight: 600; color: var(--text);
-      padding-top: 10px; margin-top: 4px;
-    }
-    .subtotal-breakdown li.total-row .val {
-      font-family: var(--display);
-      font-size: 28px; font-weight: 800;
-      color: var(--green);
-    }
-    .discount-row .val { color: var(--accent2) !important; }
+    .promo-row { display: flex; gap: 10px; }
+    .promo-row select { flex: 0 0 120px; }
+    .promo-row input { flex: 1; }
 
-    /* === GENERATE BTN === */
-    .btn-generate {
-      width: 100%;
-      margin-top: 22px;
-      padding: 15px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: var(--radius);
-      font-family: var(--display);
-      font-size: 18px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.18s, transform 0.12s;
-    }
-    .btn-generate:hover { background: #ffc137; transform: translateY(-1px); }
-    .btn-generate:active { transform: translateY(0); }
+    /* BREAKDOWN */
+    .breakdown { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-top: 26px; }
+    .breakdown ul { list-style: none; }
+    .breakdown li { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 14px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .breakdown li:last-child { border-bottom: none; }
+    .breakdown li .v { font-family: var(--mono); color: var(--off-white); }
+    .breakdown li.disc .v { color: var(--red); }
+    .breakdown li.total { padding-top: 14px; margin-top: 4px; color: var(--white); font-size: 15px; font-weight: 600; }
+    .breakdown li.total .v { font-family: var(--display); font-size: 38px; letter-spacing: 0.02em; color: var(--green); }
 
-    /* === RIGHT COLUMN === */
+    /* GENERATE BUTTON */
+    .btn-gen {
+      width: 100%; margin-top: 24px; padding: 17px;
+      background: var(--blue); border: none; border-radius: var(--radius);
+      color: var(--white); font-family: var(--display); font-size: 22px;
+      letter-spacing: 0.1em; cursor: pointer; transition: background 0.15s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-gen:hover { background: var(--blue-lt); transform: translateY(-1px); }
+    .btn-gen:active { transform: none; }
+
+    /* RIGHT COL */
     .right-col { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 24px; }
 
-    /* === QR CARD === */
-    .qr-placeholder {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 36px 20px;
-      color: var(--muted);
-      text-align: center;
-      gap: 12px;
-    }
-    .qr-placeholder .icon { font-size: 44px; opacity: 0.3; }
-    .qr-placeholder p { font-size: 13px; line-height: 1.6; }
+    /* QR */
+    .qr-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; gap: 12px; }
+    .qr-empty .icon { font-size: 50px; opacity: 0.15; }
+    .qr-empty p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-    .qr-content { padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .qr-ready { display: none; flex-direction: column; align-items: center; padding: 24px; gap: 16px; }
     #qrcode { display: none; }
-    #qrcode canvas, #qrcode img {
-      width: 180px !important; height: 180px !important;
-      border-radius: 4px;
-      padding: 8px;
-      background: #fff;
-      display: block;
-    }
+    #qrcode canvas, #qrcode img { width: 180px !important; height: 180px !important; border-radius: 6px; padding: 8px; background: #fff; display: block; }
+    .qr-badge { font-family: var(--mono); font-size: 12px; background: rgba(34,197,94,0.1); border: 1px solid var(--green); color: var(--green); padding: 4px 14px; border-radius: 20px; }
+    .qr-hint { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
 
-    .subtotal-badge {
-      font-family: var(--mono);
-      font-size: 11px;
-      background: rgba(46,204,113,0.12);
-      border: 1px solid var(--green);
-      color: var(--green);
-      padding: 4px 12px;
-      border-radius: 20px;
-    }
+    /* URL */
+    #url-card { display: none; }
+    .url-field { display: flex; gap: 8px; }
+    .url-text { flex: 1; background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 13px; font-family: var(--mono); font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-copy { padding: 10px 15px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--off-white); font-size: 13px; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+    .btn-copy:hover { background: var(--blue); border-color: var(--blue); }
+    .btn-copy.copied { background: var(--green); border-color: var(--green); color: #000; }
+    .preview-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--blue-lt); text-decoration: none; font-weight: 700; letter-spacing: 0.05em; }
+    .preview-link:hover { color: var(--white); }
 
-    /* === URL BOX === */
-    .url-box { display: none; }
-    .url-box .card-body { padding: 16px; }
-    .url-field {
-      display: flex; gap: 8px; align-items: center;
-    }
-    .url-text {
-      flex: 1;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 12px;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .btn-copy {
-      padding: 10px 14px;
-      background: var(--border);
-      border: none;
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .btn-copy:hover { background: var(--accent); color: #000; }
-    .btn-copy.copied { background: var(--green); color: #000; }
-
-    /* === RATE TABLE === */
-    .rate-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(245,166,35,0.1);
-      border: 1px solid rgba(245,166,35,0.3);
-      border-radius: 20px;
-      padding: 3px 10px 3px 6px;
-      font-size: 11px; color: var(--accent);
-    }
-    .rate-pill span { font-family: var(--mono); font-size: 13px; font-weight: 500; }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 700px) {
-      .wrapper { grid-template-columns: 1fr; padding: 20px 16px 48px; }
+    @media (max-width: 720px) {
+      .wrapper { grid-template-columns: 1fr; padding: 20px 16px 52px; }
       .right-col { position: static; }
+      .header-rate { display: none; }
+      header { padding: 0 16px; }
+      .logo-wrap img { height: 50px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-badge">M</div>
-  <div>
-    <div class="logo-text">MOVE<span>QUICK</span></div>
-    <div class="header-sub">Quote &amp; Tip Generator</div>
+  <div class="logo-wrap">
+    <img src="M4HM_Logo.png" alt="Muscle For Hire Movers Logo" />
+    <div class="header-title">
+      <div class="name">MUSCLE FOR HIRE MOVERS</div>
+      <div class="sub">Quote &amp; Tip Generator</div>
+    </div>
   </div>
+  <div class="header-rate">$50 / HR · PER MOVER</div>
 </header>
 
 <div class="wrapper">
 
-  <!-- ===== LEFT: CALCULATOR ===== -->
+  <!-- LEFT -->
   <div>
+    <div class="page-title">Build Your Quote</div>
+
     <div class="card">
-      <div class="card-header">
-        <div class="card-num">1</div>
-        <h2>Build Your Quote</h2>
-        <div class="rate-pill">
-          <span>$50</span>/hr per mover
-        </div>
+      <div class="card-hd">
+        <div class="step-dot">1</div>
+        <h2>JOB DETAILS</h2>
+        <div class="rate-pill">$50 / hr per mover</div>
       </div>
       <div class="card-body">
 
-        <!-- Movers -->
         <div class="field">
           <label>Number of Movers</label>
           <div class="stepper">
@@ -341,7 +216,6 @@
           </div>
         </div>
 
-        <!-- Hours -->
         <div class="field">
           <label>Hours Worked</label>
           <div class="stepper">
@@ -349,19 +223,17 @@
             <input type="number" id="hours" value="2" min="0.25" max="24" step="0.25" oninput="recalc()" />
             <button type="button" onclick="adjustHours(0.25)">+</button>
           </div>
-          <div class="hours-display" style="margin-top:8px;">
-            <span class="hours-label">Duration</span>
-            <span class="hours-val" id="hours-readable">2 hrs 0 min</span>
+          <div class="hours-meta">
+            <span>± 15-min increments</span>
+            <em id="hours-readable">2 hrs 0 min</em>
           </div>
         </div>
 
-        <!-- Travel Fee -->
         <div class="field">
           <label>Travel Fee ($)</label>
           <input type="number" id="travel" value="0" min="0" step="5" placeholder="0.00" oninput="recalc()" />
         </div>
 
-        <!-- Promo -->
         <div class="field">
           <label>Promo / Discount</label>
           <div class="promo-row">
@@ -374,225 +246,139 @@
           </div>
         </div>
 
-        <!-- Subtotal Breakdown -->
-        <div class="subtotal-block">
-          <ul class="subtotal-breakdown" id="breakdown">
-            <li><span>Labor (2 movers × 2.00 hrs × $50)</span><span class="val" id="bd-labor">$200.00</span></li>
-            <li><span>Travel fee</span><span class="val" id="bd-travel">$0.00</span></li>
-            <li class="discount-row" id="bd-promo-row" style="display:none;"><span id="bd-promo-label">Promo</span><span class="val" id="bd-promo">−$0.00</span></li>
-            <li class="total-row"><span>Subtotal</span><span class="val" id="bd-subtotal">$200.00</span></li>
+        <div class="breakdown">
+          <ul>
+            <li>
+              <span id="labor-label">Labor (2 movers × 2.00 hrs × $50)</span>
+              <span class="v" id="bd-labor">$200.00</span>
+            </li>
+            <li>
+              <span>Travel fee</span>
+              <span class="v" id="bd-travel">$0.00</span>
+            </li>
+            <li class="disc" id="bd-promo-row" style="display:none;">
+              <span id="bd-promo-label">Discount</span>
+              <span class="v" id="bd-promo">−$0.00</span>
+            </li>
+            <li class="total">
+              <span>Subtotal</span>
+              <span class="v" id="bd-subtotal">$200.00</span>
+            </li>
           </ul>
         </div>
 
-        <button class="btn-generate" onclick="generateQR()">
-          ⚡ Generate Tip Link &amp; QR Code
+        <button class="btn-gen" onclick="generateQR()">
+          ⚡ GENERATE TIP LINK &amp; QR CODE
         </button>
 
       </div>
     </div>
   </div>
 
-  <!-- ===== RIGHT: QR + URL ===== -->
+  <!-- RIGHT -->
   <div class="right-col">
-    <div class="card" id="qr-card">
-      <div class="card-header">
-        <div class="card-num">2</div>
-        <h2>Tip Page QR Code</h2>
+
+    <div class="card">
+      <div class="card-hd">
+        <div class="step-dot">2</div>
+        <h2>TIP PAGE QR CODE</h2>
       </div>
-      <div id="qr-placeholder" class="qr-placeholder">
-        <div class="icon">◫</div>
-        <p>Fill in the quote details and click<br/><strong style="color:var(--text)">Generate Tip Link</strong><br/>to create the QR code.</p>
+
+      <div class="qr-empty" id="qr-empty">
+        <div class="icon">▪</div>
+        <p>Click <strong style="color:var(--white)">Generate Tip Link</strong> to create a QR code your customer can scan to tip and pay.</p>
       </div>
-      <div class="qr-content" id="qr-show" style="display:none;">
+
+      <div class="qr-ready" id="qr-ready">
         <div id="qrcode"></div>
-        <div class="subtotal-badge" id="qr-subtotal-badge"></div>
-        <p style="font-size:12px;color:var(--muted);text-align:center;line-height:1.5;">
-          Customer scans this to open<br/>the tip &amp; payment page.
-        </p>
+        <div class="qr-badge" id="qr-badge">Subtotal: $0.00</div>
+        <p class="qr-hint">Customer scans to choose a tip<br/>and complete payment.</p>
       </div>
     </div>
 
-    <div class="card url-box" id="url-box">
-      <div class="card-header">
-        <div class="card-num">3</div>
-        <h2>Tip Page URL</h2>
+    <div class="card" id="url-card">
+      <div class="card-hd">
+        <div class="step-dot">3</div>
+        <h2>TIP PAGE URL</h2>
       </div>
       <div class="card-body">
         <div class="url-field">
           <div class="url-text" id="url-display">—</div>
           <button class="btn-copy" id="copy-btn" onclick="copyUrl()">Copy</button>
         </div>
-        <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">
-          Share this link directly with the customer or open it yourself on their device.
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;">
+          Send this link or open it on the customer's device.
         </p>
-        <a id="open-tip-link" href="#" target="_blank"
-           style="display:inline-block;margin-top:12px;font-size:12px;color:var(--accent);text-decoration:none;">
-          ↗ Preview Tip Page
-        </a>
+        <a class="preview-link" id="open-tip-link" href="#" target="_blank">↗ Open Tip Page</a>
       </div>
     </div>
-  </div>
 
+  </div>
 </div>
 
 <script>
-  // ──────────────────────────────────────────────
-  // STATE
-  // ──────────────────────────────────────────────
-  let currentSubtotal = 0;
-  let qrInstance = null;
-  let generatedUrl = '';
+  let currentSubtotal = 0, generatedUrl = '';
 
-  // ──────────────────────────────────────────────
-  // HELPERS
-  // ──────────────────────────────────────────────
-  function fmt(n) {
-    return '$' + n.toFixed(2);
-  }
+  const fmt   = n  => '$' + n.toFixed(2);
+  const pNum  = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
+  const toHR  = h  => { const hrs = Math.floor(h), min = Math.round((h-hrs)*60); if(!hrs) return `${min} min`; if(!min) return `${hrs} hr${hrs!==1?'s':''}`; return `${hrs} hr${hrs!==1?'s':''} ${min} min`; };
 
-  function parseNum(id, fallback = 0) {
-    const v = parseFloat(document.getElementById(id).value);
-    return isNaN(v) ? fallback : v;
-  }
+  function adjustMovers(d) { const e=document.getElementById('movers'); e.value=Math.max(1,Math.min(10,+e.value+d)); recalc(); }
+  function adjustHours(d)  { const e=document.getElementById('hours');  e.value=Math.max(0.25,Math.min(24,Math.round((+e.value+d)*4)/4)).toFixed(2); recalc(); }
 
-  function hoursToReadable(h) {
-    const hrs  = Math.floor(h);
-    const mins = Math.round((h - hrs) * 60);
-    if (hrs === 0) return `${mins} min`;
-    if (mins === 0) return `${hrs} hr${hrs !== 1 ? 's' : ''}`;
-    return `${hrs} hr${hrs !== 1 ? 's' : ''} ${mins} min`;
-  }
-
-  function adjustMovers(delta) {
-    const el = document.getElementById('movers');
-    let v = parseInt(el.value) + delta;
-    v = Math.max(1, Math.min(10, v));
-    el.value = v;
-    recalc();
-  }
-
-  function adjustHours(delta) {
-    const el = document.getElementById('hours');
-    let v = Math.round((parseFloat(el.value) + delta) * 4) / 4;
-    v = Math.max(0.25, Math.min(24, v));
-    el.value = v.toFixed(2);
-    recalc();
-  }
-
-  // ──────────────────────────────────────────────
-  // RECALCULATE
-  // ──────────────────────────────────────────────
   function recalc() {
-    const movers  = parseNum('movers', 1);
-    const hours   = parseNum('hours', 0.25);
-    const travel  = parseNum('travel', 0);
-    const promoT  = document.getElementById('promo-type').value;
-    const promoV  = parseNum('promo-val', 0);
+    const m=pNum('movers')||1, h=pNum('hours')||0.25, tr=pNum('travel'), pt=document.getElementById('promo-type').value, pv=pNum('promo-val');
+    const labor=m*h*50;
+    let disc=pt==='flat'?Math.min(pv,labor+tr):pt==='percent'?(labor+tr)*pv/100:0;
+    disc=Math.max(0,disc);
+    currentSubtotal=Math.max(0,labor+tr-disc);
 
-    const labor   = movers * hours * 50;
-    let   discount = 0;
-
-    if (promoT === 'flat')    discount = Math.min(promoV, labor + travel);
-    if (promoT === 'percent') discount = (labor + travel) * (promoV / 100);
-    discount = Math.max(0, discount);
-
-    const subtotal = labor + travel - discount;
-    currentSubtotal = Math.max(0, subtotal);
-
-    // Update display
-    document.getElementById('hours-readable').textContent = hoursToReadable(hours);
+    document.getElementById('hours-readable').textContent = toHR(h);
+    document.getElementById('labor-label').textContent    = `Labor (${m} mover${m!==1?'s':''} × ${h.toFixed(2)} hrs × $50)`;
     document.getElementById('bd-labor').textContent       = fmt(labor);
-    document.getElementById('bd-travel').textContent      = fmt(travel);
+    document.getElementById('bd-travel').textContent      = fmt(tr);
     document.getElementById('bd-subtotal').textContent    = fmt(currentSubtotal);
 
-    document.getElementById(`bd-labor`).closest('li').querySelector('span').textContent =
-      `Labor (${movers} mover${movers!==1?'s':''} × ${hours.toFixed(2)} hrs × $50)`;
-
-    const promoRow   = document.getElementById('bd-promo-row');
-    const promoLabel = document.getElementById('bd-promo-label');
-    const promoVal   = document.getElementById('bd-promo');
-    if (promoT !== 'none' && discount > 0) {
-      promoRow.style.display = '';
-      promoLabel.textContent = promoT === 'percent' ? `Promo (${promoV}%)` : 'Promo (flat)';
-      promoVal.textContent   = `−${fmt(discount)}`;
-    } else {
-      promoRow.style.display = 'none';
-    }
+    const pr = document.getElementById('bd-promo-row');
+    if (pt !== 'none' && disc > 0) {
+      pr.style.display='';
+      document.getElementById('bd-promo-label').textContent = pt==='percent'?`Promo (${pv}%)`:'Promo (flat)';
+      document.getElementById('bd-promo').textContent = `−${fmt(disc)}`;
+    } else { pr.style.display='none'; }
   }
 
-  // ──────────────────────────────────────────────
-  // BUILD TIP PAGE URL
-  // ──────────────────────────────────────────────
-  function buildTipUrl(subtotal) {
-    // Works on GitHub Pages regardless of repo path depth
-    const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
-    const normalized = base.endsWith('/') ? base : base + '/';
-    return `${normalized}tip.html?subtotal=${subtotal.toFixed(2)}`;
+  function buildTipUrl(sub) {
+    const base = window.location.href.split('?')[0].replace(/index\.html$/,'');
+    return (base.endsWith('/')?base:base+'/') + `tip.html?subtotal=${sub.toFixed(2)}`;
   }
 
-  // ──────────────────────────────────────────────
-  // GENERATE QR
-  // ──────────────────────────────────────────────
   function generateQR() {
     recalc();
     const url = buildTipUrl(currentSubtotal);
     generatedUrl = url;
 
-    // Show / hide sections
-    document.getElementById('qr-placeholder').style.display = 'none';
-    document.getElementById('qr-show').style.display = 'flex';
-    document.getElementById('url-box').style.display = 'block';
-
-    // Badge
-    document.getElementById('qr-subtotal-badge').textContent =
-      `Subtotal: $${currentSubtotal.toFixed(2)}`;
-
-    // URL display
+    document.getElementById('qr-empty').style.display  = 'none';
+    document.getElementById('qr-ready').style.display  = 'flex';
+    document.getElementById('url-card').style.display  = 'block';
+    document.getElementById('qr-badge').textContent    = `Subtotal: $${currentSubtotal.toFixed(2)}`;
     document.getElementById('url-display').textContent = url;
-    document.getElementById('open-tip-link').href = url;
+    document.getElementById('open-tip-link').href      = url;
 
-    // QR Code
     const qrEl = document.getElementById('qrcode');
     qrEl.style.display = 'block';
-    qrEl.innerHTML = '';  // clear old
-
-    new QRCode(qrEl, {
-      text:           url,
-      width:          180,
-      height:         180,
-      colorDark:      '#000000',
-      colorLight:     '#ffffff',
-      correctLevel:   QRCode.CorrectLevel.H
-    });
+    qrEl.innerHTML = '';
+    new QRCode(qrEl, { text:url, width:180, height:180, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H });
   }
 
-  // ──────────────────────────────────────────────
-  // COPY URL
-  // ──────────────────────────────────────────────
   function copyUrl() {
     if (!generatedUrl) return;
     navigator.clipboard.writeText(generatedUrl).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = '✓ Copied';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copy';
-        btn.classList.remove('copied');
-      }, 2000);
-    }).catch(() => {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = generatedUrl;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+      const b = document.getElementById('copy-btn');
+      b.textContent='✓ Copied'; b.classList.add('copied');
+      setTimeout(()=>{ b.textContent='Copy'; b.classList.remove('copied'); }, 2000);
     });
   }
 
-  // ──────────────────────────────────────────────
-  // INIT
-  // ──────────────────────────────────────────────
   recalc();
 </script>
 </body>
