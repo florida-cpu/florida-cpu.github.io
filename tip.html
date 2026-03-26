@@ -81,7 +81,8 @@ document.getElementById('payBtn').addEventListener('click', async () => {
   const total = subtotal + tip;
   const cents = Math.round(total * 100);
 
-  const res = await fetch('YOUR_MAKE_WEBHOOK_URL', {
+  const res = await fetch('https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv
+', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
