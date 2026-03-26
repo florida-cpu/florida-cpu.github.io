@@ -6,69 +6,82 @@
 <title>Muscle for Hire Movers — Tip Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
-  .header{width:100%;background:#1a2b5e;padding:20px;display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:30px;}
-  .header-title{color:#fff;font-weight:700;font-size:1.3rem;}
-  .container{width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;}
-  .card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
-  button{width:100%;padding:14px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:8px;}
-  .total-display{font-size:22px;font-weight:700;margin-bottom:10px;text-align:right;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.header{width:100%;background:#1a2b5e;padding:15px;text-align:center;color:white;border-radius:10px;margin-bottom:20px;}
+.header h1{margin:0;font-size:1.5rem;}
+.container{width:100%;max-width:420px;background:#fff;padding:20px;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.tip-btn{padding:14px;border-radius:12px;border:1px solid #e8ecf4;background:#f4f6f9;cursor:pointer;text-align:center;font-weight:700;}
+.tip-btn.active{background:#1a2b5e;color:white;border-color:#1a2b5e;}
+input{width:100%;padding:10px;border-radius:10px;border:1.5px solid #e8ecf4;margin-top:10px;}
+button{margin-top:15px;width:100%;padding:14px;background:#1a2b5e;color:white;font-weight:700;border:none;border-radius:12px;font-size:16px;cursor:pointer;}
+.total-row{margin-top:15px;font-weight:700;font-size:18px;text-align:right;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">Muscle for Hire Movers — Tip Page</div>
+  <h1>Muscle for Hire Movers</h1>
+  <p style="font-size:0.9rem;color:#b0bbd4;">Secure Payment</p>
 </div>
 
 <div class="container">
-  <div class="card">
-    <div>Subtotal: $<span id="subtotalDisplay">0.00</span></div>
-    <div class="total-display">Total: $<span id="totalDisplay">0.00</span></div>
+  <p>Subtotal: $<span id="subtotalDisplay">0.00</span></p>
 
-    <button onclick="selectTip(20)">Tip 20%</button>
-    <button onclick="selectTip(25)">Tip 25%</button>
-    <button onclick="selectTip(30)">Tip 30%</button>
-    <button onclick="selectTip(0)">No Tip</button>
-    <input type="number" id="customTip" placeholder="Custom Tip $" step="0.01" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid #e8ecf4;margin-bottom:12px;">
-    <button onclick="selectTip('custom')">Apply Custom Tip</button>
-
-    <a id="stripeBtn" href="#" target="_blank">
-      <button>Pay with Stripe</button>
-    </a>
+  <div class="tip-grid">
+    <div class="tip-btn" data-tip="20">20%</div>
+    <div class="tip-btn" data-tip="25">25%</div>
+    <div class="tip-btn" data-tip="30">30%</div>
+    <div class="tip-btn" data-tip="0">No Tip</div>
   </div>
+
+  <input type="number" id="customTip" placeholder="Custom Tip ($)" min="0">
+
+  <div class="total-row">Total: $<span id="totalDisplay">0.00</span></div>
+
+  <button id="payBtn">Pay with Stripe</button>
 </div>
 
 <script>
-function getQueryParam(param) {
-  return new URLSearchParams(window.location.search).get(param);
+const params = new URLSearchParams(window.location.search);
+let subtotal = parseFloat(params.get('subtotal')) || 0;
+document.getElementById('subtotalDisplay').innerText = subtotal.toFixed(2);
+
+let tip = 0;
+const totalDisplay = document.getElementById('totalDisplay');
+const tipButtons = document.querySelectorAll('.tip-btn');
+const customTip = document.getElementById('customTip');
+
+function updateTotal(){
+  const total = subtotal + tip;
+  totalDisplay.innerText = total.toFixed(2);
 }
 
-let subtotal = parseFloat(getQueryParam('subtotal')) || 0;
-let tipAmount = 0;
+tipButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    tipButtons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    tip = parseFloat(btn.dataset.tip);
+    if(tip>0 && tip<100) tip = subtotal * (tip/100);
+    customTip.value = '';
+    updateTotal();
+  });
+});
 
-function updateDisplay() {
-  document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
-  document.getElementById('totalDisplay').textContent = (subtotal + tipAmount).toFixed(2);
-  
-  // Stripe link (replace with your real Stripe test/live link)
-  let cents = Math.round((subtotal + tipAmount) * 100);
-  let stripeLink = `https://buy.stripe.com/test_6oEbLh7Qs9s2aCw6oo?amount=${cents}`;
-  document.getElementById('stripeBtn').href = stripeLink;
-}
+customTip.addEventListener('input', ()=>{
+  tipButtons.forEach(b=>b.classList.remove('active'));
+  tip = parseFloat(customTip.value) || 0;
+  updateTotal();
+});
 
-function selectTip(value) {
-  if(value === 'custom'){
-    tipAmount = parseFloat(document.getElementById('customTip').value) || 0;
-  } else {
-    tipAmount = subtotal * value/100;
-  }
-  updateDisplay();
-}
+updateTotal();
 
-// initialize
-updateDisplay();
+// Stripe Payment Link with custom amount
+document.getElementById('payBtn').addEventListener('click', ()=>{
+  const totalCents = Math.round((subtotal+tip)*100);
+  const stripeLink = `https://buy.stripe.com/test_custom_amount_here?amount=${totalCents}`;
+  window.open(stripeLink,'_blank');
+});
 </script>
 
 </body>
