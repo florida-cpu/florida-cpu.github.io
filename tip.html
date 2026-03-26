@@ -6,90 +6,123 @@
 <title>Muscle for Hire Movers — Tip</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;}
-.header{width:100%;max-width:500px;background:#1a2b5e;padding:20px;border-radius:12px;text-align:center;margin-bottom:20px;color:#fff;}
-.header h1{font-size:1.5rem;margin-bottom:5px;}
-.header p{font-size:0.85rem;color:#8fa3d4;}
-.container{width:100%;max-width:500px;display:flex;flex-direction:column;gap:15px;}
-.card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8ecf4;}
-.tip-btn{width:100%;padding:14px;border-radius:12px;margin-bottom:10px;border:1px solid #e8ecf4;background:#f4f6f9;font-size:16px;font-weight:600;cursor:pointer;text-align:center;}
-.tip-btn.active{background:#1a2b5e;color:#fff;border-color:#1a2b5e;}
-.tip-btn span{display:block;}
-#custom-amount{width:100%;padding:10px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;margin-bottom:10px;outline:none;}
-#custom-amount:focus{border-color:#1a2b5e;background:#fff;}
-#total-display{font-size:1.25rem;font-weight:700;margin-top:10px;text-align:center;}
-button.pay-btn{width:100%;padding:14px;background:#1a2b5e;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;}
-button.pay-btn:hover{background:#162048;}
+.header{width:100%;background:#1a2b5e;padding:20px;display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:20px;color:#fff;font-weight:700;}
+.container{width:100%;max-width:420px;display:flex;flex-direction:column;gap:16px;}
+.card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
+.section-label{font-size:11px;font-weight:600;color:#1a2b5e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;}
+.amount-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;color:#6b7a99;}
+.amount-row span:last-child{color:#1a1a2e;font-weight:500;}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding-top:14px;margin-top:8px;border-top:2px solid #1a2b5e;}
+.total-label{font-size:15px;font-weight:600;}
+.total-value{font-size:26px;font-weight:700;color:#1a2b5e;}
+.tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.tip-btn{background:#f4f6f9;border:1.5px solid #e8ecf4;border-radius:12px;padding:14px;cursor:pointer;text-align:center;}
+.tip-btn.active{background:#1a2b5e;border-color:#1a2b5e;color:#fff;}
+.tip-btn .amt{font-size:12px;color:#6b7a99;display:block;margin-top:2px;}
+.field-input{width:100%;padding:12px 12px 12px 24px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;outline:none;}
+.field-input:focus{border-color:#1a2b5e;background:#fff;}
+.pay-btn{width:100%;background:#1a2b5e;color:#fff;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.pay-btn:disabled{background:#c5cde6;cursor:not-allowed;}
+.pay-btn.loading{background:#6b7a99;}
+.pay-btn.ready{background:#1a8c5b;}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Muscle for Hire Movers</h1>
-  <p>Add a tip and pay securely</p>
-</div>
+<div class="header">Muscle for Hire Movers — Tip</div>
 
 <div class="container">
+
   <div class="card">
-    <div id="subtotal-display">Subtotal: $0.00</div>
-
-    <button class="tip-btn" onclick="selectTip(0.2)" id="tip-20"><span>20%</span></button>
-    <button class="tip-btn" onclick="selectTip(0.25)" id="tip-25"><span>25%</span></button>
-    <button class="tip-btn" onclick="selectTip(0.3)" id="tip-30"><span>30%</span></button>
-    <button class="tip-btn" onclick="selectTip(0)" id="tip-none"><span>No Tip</span></button>
-
-    <input type="number" id="custom-amount" placeholder="Custom tip" step="0.01" style="display:none;">
-    
-    <div id="total-display">Total: $0.00</div>
-    <button class="pay-btn" onclick="payStripe()">Proceed to Payment</button>
+    <p class="section-label">Subtotal</p>
+    <div class="amount-row"><span>Subtotal</span><span id="subtotal-display">$0.00</span></div>
   </div>
+
+  <div class="card">
+    <p class="section-label">Add a tip</p>
+    <div class="tip-grid">
+      <button class="tip-btn" id="tip-20" onclick="selectTip(20)">20%</button>
+      <button class="tip-btn" id="tip-25" onclick="selectTip(25)">25%</button>
+      <button class="tip-btn" id="tip-30" onclick="selectTip(30)">30%</button>
+      <button class="tip-btn" id="tip-none" onclick="selectTip(0)">No tip</button>
+      <button class="tip-btn" id="tip-custom-btn" onclick="selectTip('custom')">Custom</button>
+    </div>
+    <input class="field-input" type="number" id="custom-amount" placeholder="Custom tip" style="display:none;margin-top:10px;">
+  </div>
+
+  <div class="card total-row">
+    <span class="total-label">Total</span>
+    <span class="total-value" id="total-display">$0.00</span>
+  </div>
+
+  <div class="card">
+    <button class="pay-btn" id="pay-btn" disabled onclick="handlePay()">Pay Now</button>
+  </div>
+
 </div>
 
 <script>
-let urlParams = new URLSearchParams(window.location.search);
-let subtotal = parseFloat(urlParams.get('subtotal') || '0');
-let tipAmount = 0;
+var WEBHOOK_URL = 'https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv'; // Your Make.com webhook
+var subtotal = parseFloat(new URLSearchParams(window.location.search).get('subtotal')) || 0;
+var tipAmount = 0;
 
-document.getElementById('subtotal-display').textContent = 'Subtotal: $' + subtotal.toFixed(2);
-document.getElementById('total-display').textContent = 'Total: $' + subtotal.toFixed(2);
+function fmt(n){ return '$'+n.toFixed(2); }
 
-function selectTip(pct) {
-  tipAmount = subtotal * pct;
-  document.querySelectorAll('.tip-btn').forEach(btn=>btn.classList.remove('active'));
-  document.getElementById('custom-amount').style.display = 'none';
-  
-  if(pct === 0 && event.target.id!=='tip-none'){
-    document.getElementById('tip-none').classList.add('active');
-  } else if(event.target.id==='tip-none'){
-    event.target.classList.add('active');
-  } else {
-    event.target.classList.add('active');
-  }
-
-  if(event.target.id==='tip-custom'){
-    document.getElementById('custom-amount').style.display='block';
-    tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
-  }
-  updateTotal();
-}
-
-document.getElementById('custom-amount').addEventListener('input',()=>{
-  tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
-  updateTotal();
-});
+document.getElementById('subtotal-display').textContent = fmt(subtotal);
+document.getElementById('total-display').textContent = fmt(subtotal);
 
 function updateTotal(){
-  document.getElementById('total-display').textContent = 'Total: $' + (subtotal + tipAmount).toFixed(2);
+  var total = subtotal + tipAmount;
+  document.getElementById('total-display').textContent = fmt(total);
+  prefetchStripe(total);
 }
 
-function payStripe(){
-  const total = (subtotal + tipAmount).toFixed(2);
-  // Replace with your Stripe Checkout URL or webhook link for actual payment
-  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${Math.round(total*100)}`;
-  window.location.href = stripeLink;
+function selectTip(pct){
+  document.querySelectorAll('.tip-btn').forEach(b=>b.classList.remove('active'));
+  tipAmount = 0;
+  document.getElementById('custom-amount').style.display='none';
+
+  if(pct==='custom'){
+    document.getElementById('tip-custom-btn').classList.add('active');
+    document.getElementById('custom-amount').style.display='block';
+    document.getElementById('custom-amount').value='';
+    document.getElementById('custom-amount').oninput=function(){
+      tipAmount = parseFloat(this.value) || 0;
+      updateTotal();
+    }
+  } else {
+    if(pct>0) tipAmount = subtotal * pct /100;
+    if(pct>0) document.getElementById('tip-'+pct).classList.add('active');
+    if(pct===0) document.getElementById('tip-none').classList.add('active');
+    updateTotal();
+  }
 }
+
+var stripeUrl = null;
+
+function prefetchStripe(total){
+  stripeUrl = null;
+  document.getElementById('pay-btn').disabled = true;
+  document.getElementById('pay-btn').className='pay-btn loading';
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({total:total})
+  }).then(r=>r.json()).then(data=>{
+    if(data.url){
+      stripeUrl = data.url;
+      document.getElementById('pay-btn').disabled = false;
+      document.getElementById('pay-btn').className='pay-btn ready';
+    }
+  }).catch(err=>console.error(err));
+}
+
+function handlePay(){
+  if(stripeUrl) window.open(stripeUrl,'_blank');
+  else alert('Payment not ready, try again.');
+}
+
 </script>
-
 </body>
 </html>
