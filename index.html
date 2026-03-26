@@ -5,21 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muscle for Hire Movers — Mover Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
-.header{width:100%;background:#1a2b5e;padding:20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;border-radius:10px;}
-.header-icon{width:40px;height:40px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.header-title{color:#fff;font-weight:700;font-size:1.2rem;}
-.container{width:100%;max-width:420px;display:flex;flex-direction:column;gap:16px;}
-.card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
-.field-label{font-weight:600;margin-bottom:6px;}
-.field-input{width:100%;padding:12px;border-radius:10px;border:1.5px solid #e8ecf4;font-size:15px;margin-bottom:10px;}
-.button{width:100%;padding:15px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-size:16px;font-weight:700;cursor:pointer;}
-.total-display{font-weight:700;font-size:20px;color:#1a2b5e;margin-bottom:10px;text-align:right;}
-.qr-section{text-align:center;margin-top:15px;}
-.qr-section canvas{margin-bottom:10px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
+  .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .header-icon{font-size:36px;}
+  .header-title{font-weight:700;font-size:1.3rem;}
+  .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
+  .card label{display:block;margin-bottom:6px;font-weight:600;}
+  .card input, .card select{width:100%;padding:10px;margin-bottom:12px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
+  .total-row{font-weight:700;font-size:1.2rem;margin-top:10px;text-align:right;}
+  .btn{padding:14px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:10px;}
+  .qr-container{text-align:center;margin-top:20px;}
 </style>
 </head>
 <body>
@@ -29,80 +27,75 @@ body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:fle
   <div class="header-title">Muscle for Hire Movers</div>
 </div>
 
-<div class="container">
+<div class="card">
+  <label for="numMovers">Number of movers:</label>
+  <input type="number" id="numMovers" value="1" min="1" step="1">
 
-  <div class="card">
-    <div class="field-label">Number of Movers</div>
-    <input type="number" id="num-movers" class="field-input" value="1" min="1" step="1">
+  <label for="hours">Hours worked:</label>
+  <input type="number" id="hours" value="1" min="0.25" step="0.25">
 
-    <div class="field-label">Hours Worked</div>
-    <input type="number" id="hours" class="field-input" value="1" min="0.25" step="0.25">
+  <label for="travelFee">Travel fee ($):</label>
+  <input type="number" id="travelFee" value="0" min="0" step="0.01">
 
-    <div class="field-label">Travel Fee ($)</div>
-    <input type="number" id="travel" class="field-input" value="0" min="0" step="0.01">
+  <label for="promoValue">Promo (enter number):</label>
+  <input type="number" id="promoValue" value="0" min="0" step="0.01">
 
-    <div class="field-label">Promo Discount</div>
-    <input type="text" id="promo" class="field-input" placeholder="Enter % or $ (e.g., 5% or 5)">
+  <label for="promoType">Promo type:</label>
+  <select id="promoType">
+    <option value="flat">Flat $ off</option>
+    <option value="percent">% off</option>
+  </select>
 
-    <div class="total-display">Total: $<span id="total">0.00</span></div>
+  <div class="total-row">Subtotal: $<span id="subtotalDisplay">0.00</span></div>
 
-    <button class="button" onclick="generateLink()">Generate QR & Link</button>
+  <button class="btn" onclick="generateTipLink()">Generate QR / Link</button>
+</div>
 
-    <div class="qr-section">
-      <canvas id="qr"></canvas>
-      <div><a href="#" id="tip-link" target="_blank">Open Tip Page</a></div>
-    </div>
-  </div>
-
+<div class="qr-container">
+  <canvas id="qrcode"></canvas>
+  <div><a href="#" id="tipLink" target="_blank"></a></div>
 </div>
 
 <script>
-const RATE = 50; // $50 per hour per mover
+const PRICE_PER_HOUR = 50;
 
-function calculateTotal() {
-  let movers = parseFloat(document.getElementById('num-movers').value) || 0;
-  let hours = parseFloat(document.getElementById('hours').value) || 0;
-  let travel = parseFloat(document.getElementById('travel').value) || 0;
-  let promoInput = document.getElementById('promo').value.trim();
-  
-  let subtotal = movers * hours * RATE + travel;
+function updateSubtotal() {
+  const movers = parseFloat(document.getElementById('numMovers').value) || 0;
+  const hours = parseFloat(document.getElementById('hours').value) || 0;
+  const travelFee = parseFloat(document.getElementById('travelFee').value) || 0;
+  let subtotal = movers * hours * PRICE_PER_HOUR + travelFee;
 
-  // Promo parsing
-  if(promoInput) {
-    if(promoInput.endsWith('%')) {
-      let pct = parseFloat(promoInput);
-      if(!isNaN(pct)) subtotal -= subtotal * pct/100;
-    } else {
-      let flat = parseFloat(promoInput);
-      if(!isNaN(flat)) subtotal -= flat;
-    }
+  const promoValue = parseFloat(document.getElementById('promoValue').value) || 0;
+  const promoType = document.getElementById('promoType').value;
+
+  if (promoValue > 0) {
+    if (promoType === 'percent') subtotal = subtotal * (1 - promoValue / 100);
+    else subtotal = subtotal - promoValue;
   }
-
-  subtotal = Math.max(0, subtotal); // prevent negative
   return subtotal.toFixed(2);
 }
 
-function generateLink() {
-  let subtotal = calculateTotal();
-  document.getElementById('total').textContent = subtotal;
+function generateTipLink() {
+  const subtotal = updateSubtotal();
+  document.getElementById('subtotalDisplay').textContent = subtotal;
 
-  let tipUrl = `https://florida-cpu.github.io/tip.html?subtotal=${subtotal}`;
-  document.getElementById('tip-link').href = tipUrl;
+  const tipPage = `https://florida-cpu.github.io/tip.html?subtotal=${subtotal}`;
+  document.getElementById('tipLink').href = tipPage;
+  document.getElementById('tipLink').textContent = "Go to tip page";
 
-  // Generate QR
-  let qr = new QRious({
-    element: document.getElementById('qr'),
-    value: tipUrl,
-    size: 180
+  // Generate QR code
+  QRCode.toCanvas(document.getElementById('qrcode'), tipPage, function (error) {
+    if (error) console.error(error);
   });
 }
 
-// Update total live
-document.getElementById('num-movers').addEventListener('input', ()=>document.getElementById('total').textContent = calculateTotal());
-document.getElementById('hours').addEventListener('input', ()=>document.getElementById('total').textContent = calculateTotal());
-document.getElementById('travel').addEventListener('input', ()=>document.getElementById('total').textContent = calculateTotal());
-document.getElementById('promo').addEventListener('input', ()=>document.getElementById('total').textContent = calculateTotal());
-
+// Update subtotal on input change
+['numMovers','hours','travelFee','promoValue','promoType'].forEach(id => {
+  document.getElementById(id).addEventListener('input', ()=>{
+    document.getElementById('subtotalDisplay').textContent = updateSubtotal();
+  });
+});
 </script>
+
 </body>
 </html>
