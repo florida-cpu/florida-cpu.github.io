@@ -77,13 +77,27 @@ customTip.addEventListener('input', ()=>{
 updateTotal();
 
 // Stripe Payment Link with custom amount
-document.getElementById('payBtn').addEventListener('click', ()=>{
+document.getElementById('payBtn').addEventListener('click', async () => {
   const total = subtotal + tip;
   const cents = Math.round(total * 100);
 
-  const stripeLink = `https://buy.stripe.com/fZu28r9Ab3fU4tgbIXfUQ1g?prefilled_amount=${cents}`;
+  const res = await fetch('YOUR_MAKE_WEBHOOK_URL', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      total: cents
+    })
+  });
 
-  window.location.href = stripeLink;
+  const data = await res.json();
+
+  if (data.url) {
+    window.location.href = data.url;
+  } else {
+    alert('Payment failed. Try again.');
+  }
 });
 </script>
 
