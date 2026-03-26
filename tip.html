@@ -3,126 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muscle for Hire Movers — Tip</title>
+<title>Muscle for Hire Movers — Tip Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;}
-.header{width:100%;background:#1a2b5e;padding:20px;display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:20px;color:#fff;font-weight:700;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.header{width:100%;background:#1a2b5e;padding:20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;border-radius:10px;}
+.header-icon{width:40px;height:40px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.header-title{color:#fff;font-weight:700;font-size:1.2rem;}
 .container{width:100%;max-width:420px;display:flex;flex-direction:column;gap:16px;}
 .card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
 .section-label{font-size:11px;font-weight:600;color:#1a2b5e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;}
-.amount-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;color:#6b7a99;}
-.amount-row span:last-child{color:#1a1a2e;font-weight:500;}
-.total-row{display:flex;justify-content:space-between;align-items:center;padding-top:14px;margin-top:8px;border-top:2px solid #1a2b5e;}
-.total-label{font-size:15px;font-weight:600;}
-.total-value{font-size:26px;font-weight:700;color:#1a2b5e;}
 .tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.tip-btn{background:#f4f6f9;border:1.5px solid #e8ecf4;border-radius:12px;padding:14px;cursor:pointer;text-align:center;}
+.tip-btn{background:#f4f6f9;border:1.5px solid #e8ecf4;border-radius:12px;padding:14px;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;}
+.tip-btn .pct{font-size:18px;font-weight:700;display:block;}
 .tip-btn.active{background:#1a2b5e;border-color:#1a2b5e;color:#fff;}
-.tip-btn .amt{font-size:12px;color:#6b7a99;display:block;margin-top:2px;}
-.field-input{width:100%;padding:12px 12px 12px 24px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;outline:none;}
-.field-input:focus{border-color:#1a2b5e;background:#fff;}
-.pay-btn{width:100%;background:#1a2b5e;color:#fff;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.15s;}
-.pay-btn:disabled{background:#c5cde6;cursor:not-allowed;}
-.pay-btn.loading{background:#6b7a99;}
-.pay-btn.ready{background:#1a8c5b;}
+.total-display{font-weight:700;font-size:20px;color:#1a2b5e;margin-bottom:10px;text-align:right;}
+.pay-btn{width:100%;background:#1a2b5e;color:#fff;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<div class="header">Muscle for Hire Movers — Tip</div>
+<div class="header">
+  <div class="header-icon">&#x1F4AA;</div>
+  <div class="header-title">Muscle for Hire Movers</div>
+</div>
 
 <div class="container">
-
   <div class="card">
-    <p class="section-label">Subtotal</p>
-    <div class="amount-row"><span>Subtotal</span><span id="subtotal-display">$0.00</span></div>
-  </div>
-
-  <div class="card">
-    <p class="section-label">Add a tip</p>
+    <p class="section-label">Tip Options</p>
     <div class="tip-grid">
-      <button class="tip-btn" id="tip-20" onclick="selectTip(20)">20%</button>
-      <button class="tip-btn" id="tip-25" onclick="selectTip(25)">25%</button>
-      <button class="tip-btn" id="tip-30" onclick="selectTip(30)">30%</button>
-      <button class="tip-btn" id="tip-none" onclick="selectTip(0)">No tip</button>
-      <button class="tip-btn" id="tip-custom-btn" onclick="selectTip('custom')">Custom</button>
+      <button class="tip-btn" onclick="selectTip(0.20)">20%</button>
+      <button class="tip-btn" onclick="selectTip(0.25)">25%</button>
+      <button class="tip-btn" onclick="selectTip(0.30)">30%</button>
+      <button class="tip-btn" onclick="selectTip(0)">No Tip</button>
+      <button class="tip-btn" onclick="customTip()">Custom</button>
     </div>
-    <input class="field-input" type="number" id="custom-amount" placeholder="Custom tip" style="display:none;margin-top:10px;">
-  </div>
+    <input type="number" id="custom-input" class="field-input" placeholder="Enter custom tip" style="display:none;margin-top:10px;">
 
-  <div class="card total-row">
-    <span class="total-label">Total</span>
-    <span class="total-value" id="total-display">$0.00</span>
+    <div class="total-display">Total: $<span id="total">0.00</span></div>
+    <button class="pay-btn" id="pay-btn" onclick="pay()">Pay with Card</button>
   </div>
-
-  <div class="card">
-    <button class="pay-btn" id="pay-btn" disabled onclick="handlePay()">Pay Now</button>
-  </div>
-
 </div>
 
 <script>
-var WEBHOOK_URL = 'https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv'; // Your Make.com webhook
-var subtotal = parseFloat(new URLSearchParams(window.location.search).get('subtotal')) || 0;
-var tipAmount = 0;
-
-function fmt(n){ return '$'+n.toFixed(2); }
-
-document.getElementById('subtotal-display').textContent = fmt(subtotal);
-document.getElementById('total-display').textContent = fmt(subtotal);
-
+let urlParams = new URLSearchParams(window.location.search);
+let subtotal = parseFloat(urlParams.get('subtotal')) || 0;
+let tipAmount = 0;
+function fmt(n){return n.toFixed(2);}
 function updateTotal(){
-  var total = subtotal + tipAmount;
-  document.getElementById('total-display').textContent = fmt(total);
-  prefetchStripe(total);
+  document.getElementById('total').textContent = fmt(subtotal + tipAmount);
 }
 
 function selectTip(pct){
-  document.querySelectorAll('.tip-btn').forEach(b=>b.classList.remove('active'));
-  tipAmount = 0;
-  document.getElementById('custom-amount').style.display='none';
+  tipAmount = subtotal * pct;
+  document.getElementById('custom-input').style.display = 'none';
+  updateTotal();
+}
 
-  if(pct==='custom'){
-    document.getElementById('tip-custom-btn').classList.add('active');
-    document.getElementById('custom-amount').style.display='block';
-    document.getElementById('custom-amount').value='';
-    document.getElementById('custom-amount').oninput=function(){
-      tipAmount = parseFloat(this.value) || 0;
-      updateTotal();
-    }
-  } else {
-    if(pct>0) tipAmount = subtotal * pct /100;
-    if(pct>0) document.getElementById('tip-'+pct).classList.add('active');
-    if(pct===0) document.getElementById('tip-none').classList.add('active');
+function customTip(){
+  document.getElementById('custom-input').style.display = 'block';
+  tipAmount = parseFloat(document.getElementById('custom-input').value) || 0;
+  updateTotal();
+  document.getElementById('custom-input').addEventListener('input', function(){
+    tipAmount = parseFloat(this.value) || 0;
     updateTotal();
-  }
+  });
 }
 
-var stripeUrl = null;
-
-function prefetchStripe(total){
-  stripeUrl = null;
-  document.getElementById('pay-btn').disabled = true;
-  document.getElementById('pay-btn').className='pay-btn loading';
-  fetch(WEBHOOK_URL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({total:total})
-  }).then(r=>r.json()).then(data=>{
-    if(data.url){
-      stripeUrl = data.url;
-      document.getElementById('pay-btn').disabled = false;
-      document.getElementById('pay-btn').className='pay-btn ready';
-    }
-  }).catch(err=>console.error(err));
+function pay(){
+  let totalCents = Math.round((subtotal+tipAmount)*100);
+  // Replace this with your actual Stripe test link
+  let stripeLink = `https://buy.stripe.com/test_link_here?amount=${totalCents}`;
+  window.location.href = stripeLink;
 }
 
-function handlePay(){
-  if(stripeUrl) window.open(stripeUrl,'_blank');
-  else alert('Payment not ready, try again.');
-}
-
+// Initialize total
+updateTotal();
 </script>
 </body>
 </html>
