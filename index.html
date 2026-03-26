@@ -1,101 +1,599 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muscle for Hire Movers — Mover Page</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-<style>
-body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
-.header{width:100%;background:#1a2b5e;padding:15px;text-align:center;color:white;border-radius:10px;margin-bottom:20px;}
-.header h1{margin:0;font-size:1.5rem;}
-.container{width:100%;max-width:420px;background:#fff;padding:20px;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-label{display:block;margin-top:12px;font-weight:600;}
-input, select{width:100%;padding:10px;margin-top:5px;border-radius:10px;border:1px solid #e8ecf4;font-size:15px;}
-button{margin-top:15px;width:100%;padding:14px;background:#1a2b5e;color:white;font-weight:700;border:none;border-radius:12px;font-size:16px;cursor:pointer;}
-.total-row{margin-top:15px;font-weight:700;font-size:18px;text-align:right;}
-.qrcode{margin-top:20px;text-align:center;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mover Quote Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f1117;
+      --surface:   #181c26;
+      --border:    #2a2f3d;
+      --accent:    #f5a623;
+      --accent2:   #e8431a;
+      --text:      #eef0f5;
+      --muted:     #7a8099;
+      --green:     #2ecc71;
+      --radius:    6px;
+      --mono:      'DM Mono', monospace;
+      --sans:      'DM Sans', sans-serif;
+      --display:   'Barlow Condensed', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* === HEADER === */
+    header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-badge {
+      width: 42px; height: 42px;
+      background: var(--accent);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display);
+      font-size: 22px; font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .logo-text { font-family: var(--display); font-size: 26px; font-weight: 700; letter-spacing: 0.03em; }
+    .logo-text span { color: var(--accent); }
+    .header-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+
+    /* === LAYOUT === */
+    .wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* === CARDS === */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card-header h2 {
+      font-family: var(--display);
+      font-size: 18px; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .card-num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-body { padding: 22px; }
+
+    /* === FORM FIELDS === */
+    .field { margin-bottom: 20px; }
+    .field:last-child { margin-bottom: 0; }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 16px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.18s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.12);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a8099' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select option { background: var(--surface); }
+
+    .promo-row { display: flex; gap: 10px; }
+    .promo-row select { flex: 0 0 110px; }
+    .promo-row input { flex: 1; }
+
+    /* steppers */
+    .stepper {
+      display: flex; align-items: center; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .stepper button {
+      width: 44px; height: 44px;
+      background: var(--bg);
+      border: none;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .stepper button:hover { background: var(--accent); color: #000; }
+    .stepper input {
+      flex: 1;
+      border: none;
+      border-radius: 0;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      text-align: center;
+      font-size: 17px;
+    }
+    .stepper input:focus { box-shadow: none; border-color: var(--border); }
+
+    /* hours display */
+    .hours-display {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 0;
+    }
+    .hours-label { font-size: 13px; color: var(--muted); }
+    .hours-val { font-family: var(--mono); font-size: 15px; color: var(--accent); font-weight: 500; }
+
+    /* === SUBTOTAL DISPLAY === */
+    .subtotal-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-top: 24px;
+    }
+    .subtotal-breakdown { list-style: none; }
+    .subtotal-breakdown li {
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: var(--muted);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .subtotal-breakdown li:last-child { border-bottom: none; }
+    .subtotal-breakdown li .val { font-family: var(--mono); color: var(--text); }
+    .subtotal-breakdown li.total-row {
+      font-size: 15px; font-weight: 600; color: var(--text);
+      padding-top: 10px; margin-top: 4px;
+    }
+    .subtotal-breakdown li.total-row .val {
+      font-family: var(--display);
+      font-size: 28px; font-weight: 800;
+      color: var(--green);
+    }
+    .discount-row .val { color: var(--accent2) !important; }
+
+    /* === GENERATE BTN === */
+    .btn-generate {
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--display);
+      font-size: 18px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+    }
+    .btn-generate:hover { background: #ffc137; transform: translateY(-1px); }
+    .btn-generate:active { transform: translateY(0); }
+
+    /* === RIGHT COLUMN === */
+    .right-col { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 24px; }
+
+    /* === QR CARD === */
+    .qr-placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 36px 20px;
+      color: var(--muted);
+      text-align: center;
+      gap: 12px;
+    }
+    .qr-placeholder .icon { font-size: 44px; opacity: 0.3; }
+    .qr-placeholder p { font-size: 13px; line-height: 1.6; }
+
+    .qr-content { padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    #qrcode { display: none; }
+    #qrcode canvas, #qrcode img {
+      width: 180px !important; height: 180px !important;
+      border-radius: 4px;
+      padding: 8px;
+      background: #fff;
+      display: block;
+    }
+
+    .subtotal-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(46,204,113,0.12);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* === URL BOX === */
+    .url-box { display: none; }
+    .url-box .card-body { padding: 16px; }
+    .url-field {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .url-text {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-copy {
+      padding: 10px 14px;
+      background: var(--border);
+      border: none;
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-copy:hover { background: var(--accent); color: #000; }
+    .btn-copy.copied { background: var(--green); color: #000; }
+
+    /* === RATE TABLE === */
+    .rate-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.3);
+      border-radius: 20px;
+      padding: 3px 10px 3px 6px;
+      font-size: 11px; color: var(--accent);
+    }
+    .rate-pill span { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 700px) {
+      .wrapper { grid-template-columns: 1fr; padding: 20px 16px 48px; }
+      .right-col { position: static; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Muscle for Hire Movers</h1>
-</div>
-
-<div class="container">
-  <label>Number of Movers</label>
-  <input type="number" id="numMovers" min="1" value="1">
-
-  <label>Hours Worked (increments of 0.25)</label>
-  <input type="number" id="hoursWorked" step="0.25" min="0.25" value="1">
-
-  <label>Travel Fee ($)</label>
-  <input type="number" id="travelFee" min="0" value="0">
-
-  <label>Promo Code (flat $ or %)</label>
-  <input type="text" id="promoCode" placeholder="e.g., 5 or 5%">
-
-  <div class="total-row">Subtotal: $<span id="subtotal">0.00</span></div>
-
-  <button onclick="generateLink()">Generate Tip Link & QR</button>
-
-  <div class="qrcode">
-    <canvas id="qr"></canvas>
-    <p><a href="#" id="tipLink" target="_blank">Or open tip page</a></p>
+<header>
+  <div class="logo-badge">M</div>
+  <div>
+    <div class="logo-text">MOVE<span>QUICK</span></div>
+    <div class="header-sub">Quote &amp; Tip Generator</div>
   </div>
+</header>
+
+<div class="wrapper">
+
+  <!-- ===== LEFT: CALCULATOR ===== -->
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <h2>Build Your Quote</h2>
+        <div class="rate-pill">
+          <span>$50</span>/hr per mover
+        </div>
+      </div>
+      <div class="card-body">
+
+        <!-- Movers -->
+        <div class="field">
+          <label>Number of Movers</label>
+          <div class="stepper">
+            <button type="button" onclick="adjustMovers(-1)">−</button>
+            <input type="number" id="movers" value="2" min="1" max="10" oninput="recalc()" />
+            <button type="button" onclick="adjustMovers(1)">+</button>
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <div class="field">
+          <label>Hours Worked</label>
+          <div class="stepper">
+            <button type="button" onclick="adjustHours(-0.25)">−</button>
+            <input type="number" id="hours" value="2" min="0.25" max="24" step="0.25" oninput="recalc()" />
+            <button type="button" onclick="adjustHours(0.25)">+</button>
+          </div>
+          <div class="hours-display" style="margin-top:8px;">
+            <span class="hours-label">Duration</span>
+            <span class="hours-val" id="hours-readable">2 hrs 0 min</span>
+          </div>
+        </div>
+
+        <!-- Travel Fee -->
+        <div class="field">
+          <label>Travel Fee ($)</label>
+          <input type="number" id="travel" value="0" min="0" step="5" placeholder="0.00" oninput="recalc()" />
+        </div>
+
+        <!-- Promo -->
+        <div class="field">
+          <label>Promo / Discount</label>
+          <div class="promo-row">
+            <select id="promo-type" onchange="recalc()">
+              <option value="none">None</option>
+              <option value="flat">Flat ($)</option>
+              <option value="percent">Percent (%)</option>
+            </select>
+            <input type="number" id="promo-val" value="0" min="0" placeholder="0" oninput="recalc()" />
+          </div>
+        </div>
+
+        <!-- Subtotal Breakdown -->
+        <div class="subtotal-block">
+          <ul class="subtotal-breakdown" id="breakdown">
+            <li><span>Labor (2 movers × 2.00 hrs × $50)</span><span class="val" id="bd-labor">$200.00</span></li>
+            <li><span>Travel fee</span><span class="val" id="bd-travel">$0.00</span></li>
+            <li class="discount-row" id="bd-promo-row" style="display:none;"><span id="bd-promo-label">Promo</span><span class="val" id="bd-promo">−$0.00</span></li>
+            <li class="total-row"><span>Subtotal</span><span class="val" id="bd-subtotal">$200.00</span></li>
+          </ul>
+        </div>
+
+        <button class="btn-generate" onclick="generateQR()">
+          ⚡ Generate Tip Link &amp; QR Code
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT: QR + URL ===== -->
+  <div class="right-col">
+    <div class="card" id="qr-card">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <h2>Tip Page QR Code</h2>
+      </div>
+      <div id="qr-placeholder" class="qr-placeholder">
+        <div class="icon">◫</div>
+        <p>Fill in the quote details and click<br/><strong style="color:var(--text)">Generate Tip Link</strong><br/>to create the QR code.</p>
+      </div>
+      <div class="qr-content" id="qr-show" style="display:none;">
+        <div id="qrcode"></div>
+        <div class="subtotal-badge" id="qr-subtotal-badge"></div>
+        <p style="font-size:12px;color:var(--muted);text-align:center;line-height:1.5;">
+          Customer scans this to open<br/>the tip &amp; payment page.
+        </p>
+      </div>
+    </div>
+
+    <div class="card url-box" id="url-box">
+      <div class="card-header">
+        <div class="card-num">3</div>
+        <h2>Tip Page URL</h2>
+      </div>
+      <div class="card-body">
+        <div class="url-field">
+          <div class="url-text" id="url-display">—</div>
+          <button class="btn-copy" id="copy-btn" onclick="copyUrl()">Copy</button>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">
+          Share this link directly with the customer or open it yourself on their device.
+        </p>
+        <a id="open-tip-link" href="#" target="_blank"
+           style="display:inline-block;margin-top:12px;font-size:12px;color:var(--accent);text-decoration:none;">
+          ↗ Preview Tip Page
+        </a>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-const RATE = 50; // $50 per hour per mover
+  // ──────────────────────────────────────────────
+  // STATE
+  // ──────────────────────────────────────────────
+  let currentSubtotal = 0;
+  let qrInstance = null;
+  let generatedUrl = '';
 
-function calculateSubtotal() {
-  const movers = parseFloat(document.getElementById('numMovers').value) || 0;
-  const hours = parseFloat(document.getElementById('hoursWorked').value) || 0;
-  let subtotal = movers * hours * RATE;
-  
-  const travel = parseFloat(document.getElementById('travelFee').value) || 0;
-  subtotal += travel;
+  // ──────────────────────────────────────────────
+  // HELPERS
+  // ──────────────────────────────────────────────
+  function fmt(n) {
+    return '$' + n.toFixed(2);
+  }
 
-  const promoInput = document.getElementById('promoCode').value.trim();
-  if(promoInput){
-    if(promoInput.endsWith('%')){
-      let pct = parseFloat(promoInput.slice(0,-1));
-      subtotal -= subtotal * (pct/100);
+  function parseNum(id, fallback = 0) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? fallback : v;
+  }
+
+  function hoursToReadable(h) {
+    const hrs  = Math.floor(h);
+    const mins = Math.round((h - hrs) * 60);
+    if (hrs === 0) return `${mins} min`;
+    if (mins === 0) return `${hrs} hr${hrs !== 1 ? 's' : ''}`;
+    return `${hrs} hr${hrs !== 1 ? 's' : ''} ${mins} min`;
+  }
+
+  function adjustMovers(delta) {
+    const el = document.getElementById('movers');
+    let v = parseInt(el.value) + delta;
+    v = Math.max(1, Math.min(10, v));
+    el.value = v;
+    recalc();
+  }
+
+  function adjustHours(delta) {
+    const el = document.getElementById('hours');
+    let v = Math.round((parseFloat(el.value) + delta) * 4) / 4;
+    v = Math.max(0.25, Math.min(24, v));
+    el.value = v.toFixed(2);
+    recalc();
+  }
+
+  // ──────────────────────────────────────────────
+  // RECALCULATE
+  // ──────────────────────────────────────────────
+  function recalc() {
+    const movers  = parseNum('movers', 1);
+    const hours   = parseNum('hours', 0.25);
+    const travel  = parseNum('travel', 0);
+    const promoT  = document.getElementById('promo-type').value;
+    const promoV  = parseNum('promo-val', 0);
+
+    const labor   = movers * hours * 50;
+    let   discount = 0;
+
+    if (promoT === 'flat')    discount = Math.min(promoV, labor + travel);
+    if (promoT === 'percent') discount = (labor + travel) * (promoV / 100);
+    discount = Math.max(0, discount);
+
+    const subtotal = labor + travel - discount;
+    currentSubtotal = Math.max(0, subtotal);
+
+    // Update display
+    document.getElementById('hours-readable').textContent = hoursToReadable(hours);
+    document.getElementById('bd-labor').textContent       = fmt(labor);
+    document.getElementById('bd-travel').textContent      = fmt(travel);
+    document.getElementById('bd-subtotal').textContent    = fmt(currentSubtotal);
+
+    document.getElementById(`bd-labor`).closest('li').querySelector('span').textContent =
+      `Labor (${movers} mover${movers!==1?'s':''} × ${hours.toFixed(2)} hrs × $50)`;
+
+    const promoRow   = document.getElementById('bd-promo-row');
+    const promoLabel = document.getElementById('bd-promo-label');
+    const promoVal   = document.getElementById('bd-promo');
+    if (promoT !== 'none' && discount > 0) {
+      promoRow.style.display = '';
+      promoLabel.textContent = promoT === 'percent' ? `Promo (${promoV}%)` : 'Promo (flat)';
+      promoVal.textContent   = `−${fmt(discount)}`;
     } else {
-      subtotal -= parseFloat(promoInput);
+      promoRow.style.display = 'none';
     }
   }
 
-  if(subtotal<0) subtotal=0;
-  return subtotal.toFixed(2);
-}
+  // ──────────────────────────────────────────────
+  // BUILD TIP PAGE URL
+  // ──────────────────────────────────────────────
+  function buildTipUrl(subtotal) {
+    // Works on GitHub Pages regardless of repo path depth
+    const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
+    const normalized = base.endsWith('/') ? base : base + '/';
+    return `${normalized}tip.html?subtotal=${subtotal.toFixed(2)}`;
+  }
 
-function generateLink(){
-  const subtotal = calculateSubtotal();
-  document.getElementById('subtotal').innerText = subtotal;
+  // ──────────────────────────────────────────────
+  // GENERATE QR
+  // ──────────────────────────────────────────────
+  function generateQR() {
+    recalc();
+    const url = buildTipUrl(currentSubtotal);
+    generatedUrl = url;
 
-  // Create tip page URL with subtotal parameter
-  const tipUrl = `${window.location.origin}/tip.html?subtotal=${subtotal}`;
-  document.getElementById('tipLink').href = tipUrl;
-  document.getElementById('tipLink').innerText = tipUrl;
+    // Show / hide sections
+    document.getElementById('qr-placeholder').style.display = 'none';
+    document.getElementById('qr-show').style.display = 'flex';
+    document.getElementById('url-box').style.display = 'block';
 
-  // Generate QR code
-  const qr = new QRious({
-    element: document.getElementById('qr'),
-    value: tipUrl,
-    size: 180
-  });
-}
+    // Badge
+    document.getElementById('qr-subtotal-badge').textContent =
+      `Subtotal: $${currentSubtotal.toFixed(2)}`;
 
-// Update subtotal live when inputs change
-document.querySelectorAll('#numMovers, #hoursWorked, #travelFee, #promoCode').forEach(el=>{
-  el.addEventListener('input', ()=> {
-    document.getElementById('subtotal').innerText = calculateSubtotal();
-  });
-});
+    // URL display
+    document.getElementById('url-display').textContent = url;
+    document.getElementById('open-tip-link').href = url;
+
+    // QR Code
+    const qrEl = document.getElementById('qrcode');
+    qrEl.style.display = 'block';
+    qrEl.innerHTML = '';  // clear old
+
+    new QRCode(qrEl, {
+      text:           url,
+      width:          180,
+      height:         180,
+      colorDark:      '#000000',
+      colorLight:     '#ffffff',
+      correctLevel:   QRCode.CorrectLevel.H
+    });
+  }
+
+  // ──────────────────────────────────────────────
+  // COPY URL
+  // ──────────────────────────────────────────────
+  function copyUrl() {
+    if (!generatedUrl) return;
+    navigator.clipboard.writeText(generatedUrl).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = generatedUrl;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    });
+  }
+
+  // ──────────────────────────────────────────────
+  // INIT
+  // ──────────────────────────────────────────────
+  recalc();
 </script>
-
 </body>
 </html>
