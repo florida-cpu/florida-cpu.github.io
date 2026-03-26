@@ -78,9 +78,12 @@ updateTotal();
 
 // Stripe Payment Link with custom amount
 document.getElementById('payBtn').addEventListener('click', ()=>{
-  const totalCents = Math.round((subtotal+tip)*100);
-  const stripeLink = `https://buy.stripe.com/fZu28r9Ab3fU4tgbIXfUQ1g`;
-  window.open(stripeLink,'_blank');
+  const total = subtotal + tip;
+  const cents = Math.round(total * 100);
+
+  const stripeLink = `https://buy.stripe.com/fZu28r9Ab3fU4tgbIXfUQ1g?prefilled_amount=${cents}`;
+
+  window.location.href = stripeLink;
 });
 </script>
 
