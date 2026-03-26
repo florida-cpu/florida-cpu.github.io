@@ -5,107 +5,96 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muscle for Hire Movers — Mover Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
-  .header{width:100%;background:#1a2b5e;padding:20px;display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:30px;}
-  .header-title{color:#fff;font-weight:700;font-size:1.3rem;}
-  .container{width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;}
-  .card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
-  label{display:block;margin-bottom:4px;font-weight:600;}
-  input[type=number], input[type=text]{width:100%;padding:10px;border-radius:8px;border:1.5px solid #e8ecf4;font-size:15px;margin-bottom:12px;}
-  select{width:100%;padding:10px;border-radius:8px;border:1.5px solid #e8ecf4;font-size:15px;margin-bottom:12px;}
-  button{width:100%;padding:14px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-weight:700;font-size:16px;cursor:pointer;}
-  .total-display{font-size:22px;font-weight:700;margin-bottom:10px;text-align:right;}
-  .qrcode-wrap{text-align:center;margin-top:16px;}
-  a{color:#1a2b5e;font-weight:600;text-decoration:underline;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.header{width:100%;background:#1a2b5e;padding:15px;text-align:center;color:white;border-radius:10px;margin-bottom:20px;}
+.header h1{margin:0;font-size:1.5rem;}
+.container{width:100%;max-width:420px;background:#fff;padding:20px;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+label{display:block;margin-top:12px;font-weight:600;}
+input, select{width:100%;padding:10px;margin-top:5px;border-radius:10px;border:1px solid #e8ecf4;font-size:15px;}
+button{margin-top:15px;width:100%;padding:14px;background:#1a2b5e;color:white;font-weight:700;border:none;border-radius:12px;font-size:16px;cursor:pointer;}
+.total-row{margin-top:15px;font-weight:700;font-size:18px;text-align:right;}
+.qrcode{margin-top:20px;text-align:center;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">Muscle for Hire Movers — Mover Page</div>
+  <h1>Muscle for Hire Movers</h1>
 </div>
 
 <div class="container">
+  <label>Number of Movers</label>
+  <input type="number" id="numMovers" min="1" value="1">
 
-  <div class="card">
-    <label>Number of movers</label>
-    <input type="number" id="numMovers" min="1" value="1">
-    
-    <label>Hours worked (0.25 increments)</label>
-    <input type="number" id="hoursWorked" min="0.25" step="0.25" value="1">
+  <label>Hours Worked (increments of 0.25)</label>
+  <input type="number" id="hoursWorked" step="0.25" min="0.25" value="1">
 
-    <label>Travel Fee ($)</label>
-    <input type="number" id="travelFee" min="0" step="0.01" value="0">
+  <label>Travel Fee ($)</label>
+  <input type="number" id="travelFee" min="0" value="0">
 
-    <label>Promo</label>
-    <input type="number" id="promoValue" min="0" value="0">
-    <select id="promoType">
-      <option value="percent">Percent (%)</option>
-      <option value="flat">Flat ($)</option>
-    </select>
+  <label>Promo Code (flat $ or %)</label>
+  <input type="text" id="promoCode" placeholder="e.g., 5 or 5%">
 
-    <div class="total-display">Subtotal: $<span id="subtotalDisplay">0.00</span></div>
+  <div class="total-row">Subtotal: $<span id="subtotal">0.00</span></div>
 
-    <button id="generateBtn">Generate QR & Link</button>
+  <button onclick="generateLink()">Generate Tip Link & QR</button>
 
-    <div class="qrcode-wrap" id="qrcode"></div>
-    <div style="text-align:center;margin-top:12px;">
-      Link: <a href="#" id="tipLink" target="_blank">Open Tip Page</a>
-    </div>
+  <div class="qrcode">
+    <canvas id="qr"></canvas>
+    <p><a href="#" id="tipLink" target="_blank">Or open tip page</a></p>
   </div>
-
 </div>
 
 <script>
-const MOVER_RATE = 50;
+const RATE = 50; // $50 per hour per mover
 
 function calculateSubtotal() {
-  let movers = parseFloat(document.getElementById('numMovers').value) || 0;
-  let hours = parseFloat(document.getElementById('hoursWorked').value) || 0;
-  let travel = parseFloat(document.getElementById('travelFee').value) || 0;
-  let promo = parseFloat(document.getElementById('promoValue').value) || 0;
-  let promoType = document.getElementById('promoType').value;
+  const movers = parseFloat(document.getElementById('numMovers').value) || 0;
+  const hours = parseFloat(document.getElementById('hoursWorked').value) || 0;
+  let subtotal = movers * hours * RATE;
+  
+  const travel = parseFloat(document.getElementById('travelFee').value) || 0;
+  subtotal += travel;
 
-  let subtotal = movers * hours * MOVER_RATE + travel;
-
-  if (promoType === 'percent') {
-    subtotal -= subtotal * (promo/100);
-  } else {
-    subtotal -= promo;
+  const promoInput = document.getElementById('promoCode').value.trim();
+  if(promoInput){
+    if(promoInput.endsWith('%')){
+      let pct = parseFloat(promoInput.slice(0,-1));
+      subtotal -= subtotal * (pct/100);
+    } else {
+      subtotal -= parseFloat(promoInput);
+    }
   }
-  subtotal = Math.max(0, subtotal);
+
+  if(subtotal<0) subtotal=0;
   return subtotal.toFixed(2);
 }
 
-function updateSubtotalDisplay() {
-  document.getElementById('subtotalDisplay').textContent = calculateSubtotal();
+function generateLink(){
+  const subtotal = calculateSubtotal();
+  document.getElementById('subtotal').innerText = subtotal;
+
+  // Create tip page URL with subtotal parameter
+  const tipUrl = `${window.location.origin}/tip.html?subtotal=${subtotal}`;
+  document.getElementById('tipLink').href = tipUrl;
+  document.getElementById('tipLink').innerText = tipUrl;
+
+  // Generate QR code
+  const qr = new QRious({
+    element: document.getElementById('qr'),
+    value: tipUrl,
+    size: 180
+  });
 }
 
-document.getElementById('numMovers').addEventListener('input', updateSubtotalDisplay);
-document.getElementById('hoursWorked').addEventListener('input', updateSubtotalDisplay);
-document.getElementById('travelFee').addEventListener('input', updateSubtotalDisplay);
-document.getElementById('promoValue').addEventListener('input', updateSubtotalDisplay);
-document.getElementById('promoType').addEventListener('change', updateSubtotalDisplay);
-
-document.getElementById('generateBtn').addEventListener('click', function() {
-  let subtotal = calculateSubtotal();
-  let tipPageUrl = `tip.html?subtotal=${subtotal}`;
-  
-  // QR code
-  document.getElementById('qrcode').innerHTML = '';
-  new QRCode(document.getElementById('qrcode'), tipPageUrl);
-
-  // Link
-  let linkEl = document.getElementById('tipLink');
-  linkEl.href = tipPageUrl;
-  linkEl.textContent = tipPageUrl;
+// Update subtotal live when inputs change
+document.querySelectorAll('#numMovers, #hoursWorked, #travelFee, #promoCode').forEach(el=>{
+  el.addEventListener('input', ()=> {
+    document.getElementById('subtotal').innerText = calculateSubtotal();
+  });
 });
-
-// initialize
-updateSubtotalDisplay();
 </script>
 
 </body>
