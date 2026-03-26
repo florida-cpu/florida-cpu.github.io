@@ -6,17 +6,17 @@
 <title>Muscle for Hire Movers — Tip Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
-  .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-  .header-icon{font-size:36px;}
-  .header-title{font-weight:700;font-size:1.3rem;}
-  .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
-  .tip-btn{padding:14px;border:none;border-radius:12px;background:#f4f6f9;color:#1a1a2e;font-weight:700;font-size:16px;margin:6px;cursor:pointer;}
-  .tip-btn.active{background:#1a2b5e;color:#fff;}
-  .field-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
-  .total-row{font-weight:700;font-size:1.3rem;margin-top:10px;text-align:right;}
-  .btn{padding:14px;border:none;border-radius:12px;background:#1a8c5b;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:12px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.header-icon{font-size:36px;}
+.header-title{font-weight:700;font-size:1.3rem;}
+.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
+.tip-btn{padding:14px;border:none;border-radius:12px;background:#f4f6f9;color:#1a1a2e;font-weight:700;font-size:16px;margin:6px;cursor:pointer;}
+.tip-btn.active{background:#1a2b5e;color:#fff;}
+.field-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
+.total-row{font-weight:700;font-size:1.3rem;margin-top:10px;text-align:right;}
+.btn{padding:14px;border:none;border-radius:12px;background:#1a8c5b;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -40,10 +40,16 @@
 
   <div class="total-row">Total: $<span id="totalDisplay">0.00</span></div>
 
-  <button class="btn" onclick="pay()">Pay Now</button>
+  <button class="btn" id="payBtn">Pay Now</button>
 </div>
 
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
+const stripePublicKey = "pk_test_XXXXXXXXXXXXXXXX"; // Replace with your Stripe Publishable Key
+const stripe = Stripe(stripePublicKey);
+
 function getSubtotal() {
   const urlParams = new URLSearchParams(window.location.search);
   const subtotal = parseFloat(urlParams.get('subtotal')) || 0;
@@ -77,12 +83,15 @@ document.getElementById('customTip').addEventListener('input', ()=>{
   updateTotal();
 });
 
-function pay() {
-  const totalCents = Math.round((subtotal + tip) * 100);
-  // Replace this with your actual Stripe checkout link
-  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${totalCents}`;
+document.getElementById('payBtn').addEventListener('click', async ()=>{
+  const total = subtotal + tip;
+
+  // Call your backend endpoint to create a Stripe Checkout Session
+  // For demo purposes, we simulate this using Stripe test link
+  // Replace this section with real fetch to your server creating session
+  const stripeLink = `https://buy.stripe.com/test_XXXXXXXXXXXXXXXX?amount=${Math.round(total*100)}`;
   window.location.href = stripeLink;
-}
+});
 
 updateTotal();
 </script>
