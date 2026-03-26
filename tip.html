@@ -6,95 +6,69 @@
 <title>Muscle for Hire Movers — Tip Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
-.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-.header-icon{font-size:36px;}
-.header-title{font-weight:700;font-size:1.3rem;}
-.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
-.tip-btn{padding:14px;border:none;border-radius:12px;background:#f4f6f9;color:#1a1a2e;font-weight:700;font-size:16px;margin:6px;cursor:pointer;}
-.tip-btn.active{background:#1a2b5e;color:#fff;}
-.field-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
-.total-row{font-weight:700;font-size:1.3rem;margin-top:10px;text-align:right;}
-.btn{padding:14px;border:none;border-radius:12px;background:#1a8c5b;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:12px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
+  .header{width:100%;background:#1a2b5e;padding:20px;display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:30px;}
+  .header-title{color:#fff;font-weight:700;font-size:1.3rem;}
+  .container{width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;}
+  .card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
+  button{width:100%;padding:14px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:8px;}
+  .total-display{font-size:22px;font-weight:700;margin-bottom:10px;text-align:right;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-icon">&#x1F4AA;</div>
-  <div class="header-title">Muscle for Hire Movers</div>
+  <div class="header-title">Muscle for Hire Movers — Tip Page</div>
 </div>
 
-<div class="card">
-  <div>Subtotal: $<span id="subtotalDisplay">0.00</span></div>
+<div class="container">
+  <div class="card">
+    <div>Subtotal: $<span id="subtotalDisplay">0.00</span></div>
+    <div class="total-display">Total: $<span id="totalDisplay">0.00</span></div>
 
-  <p style="margin-top:12px;font-weight:600;">Select Tip:</p>
-  <button class="tip-btn" onclick="selectTip(20)" id="tip20">20%</button>
-  <button class="tip-btn" onclick="selectTip(25)" id="tip25">25%</button>
-  <button class="tip-btn" onclick="selectTip(30)" id="tip30">30%</button>
-  <button class="tip-btn" onclick="selectTip(0)" id="tip0">No Tip</button>
-  <div style="margin-top:10px;">
-    <input class="field-input" type="number" id="customTip" placeholder="Custom $">
+    <button onclick="selectTip(20)">Tip 20%</button>
+    <button onclick="selectTip(25)">Tip 25%</button>
+    <button onclick="selectTip(30)">Tip 30%</button>
+    <button onclick="selectTip(0)">No Tip</button>
+    <input type="number" id="customTip" placeholder="Custom Tip $" step="0.01" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid #e8ecf4;margin-bottom:12px;">
+    <button onclick="selectTip('custom')">Apply Custom Tip</button>
+
+    <a id="stripeBtn" href="#" target="_blank">
+      <button>Pay with Stripe</button>
+    </a>
   </div>
-
-  <div class="total-row">Total: $<span id="totalDisplay">0.00</span></div>
-
-  <button class="btn" id="payBtn">Pay Now</button>
 </div>
-
-<!-- Stripe.js -->
-<script src="https://js.stripe.com/v3/"></script>
 
 <script>
-const stripePublicKey = "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
-"; // Replace with your Stripe Publishable Key
-const stripe = Stripe(stripePublicKey);
-
-function getSubtotal() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const subtotal = parseFloat(urlParams.get('subtotal')) || 0;
-  return subtotal;
+function getQueryParam(param) {
+  return new URLSearchParams(window.location.search).get(param);
 }
 
-let subtotal = getSubtotal();
-let tip = 0;
-document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
+let subtotal = parseFloat(getQueryParam('subtotal')) || 0;
+let tipAmount = 0;
 
-function updateTotal() {
-  const total = subtotal + tip;
-  document.getElementById('totalDisplay').textContent = total.toFixed(2);
+function updateDisplay() {
+  document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
+  document.getElementById('totalDisplay').textContent = (subtotal + tipAmount).toFixed(2);
+  
+  // Stripe link (replace with your real Stripe test/live link)
+  let cents = Math.round((subtotal + tipAmount) * 100);
+  let stripeLink = `https://buy.stripe.com/test_6oEbLh7Qs9s2aCw6oo?amount=${cents}`;
+  document.getElementById('stripeBtn').href = stripeLink;
 }
 
-function clearActive() {
-  ['tip20','tip25','tip30','tip0'].forEach(id=>document.getElementById(id).classList.remove('active'));
+function selectTip(value) {
+  if(value === 'custom'){
+    tipAmount = parseFloat(document.getElementById('customTip').value) || 0;
+  } else {
+    tipAmount = subtotal * value/100;
+  }
+  updateDisplay();
 }
 
-function selectTip(pct) {
-  clearActive();
-  if (pct === 0) { tip = 0; document.getElementById('tip0').classList.add('active'); }
-  else { tip = subtotal * (pct/100); document.getElementById('tip'+pct).classList.add('active'); }
-  document.getElementById('customTip').value = '';
-  updateTotal();
-}
-
-document.getElementById('customTip').addEventListener('input', ()=>{
-  tip = parseFloat(document.getElementById('customTip').value) || 0;
-  clearActive();
-  updateTotal();
-});
-
-document.getElementById('payBtn').addEventListener('click', async ()=>{
-  const total = subtotal + tip;
-
-  // Call your backend endpoint to create a Stripe Checkout Session
-  // For demo purposes, we simulate this using Stripe test link
-  // Replace this section with real fetch to your server creating session
-  const stripeLink = `https://buy.stripe.com/test_XXXXXXXXXXXXXXXX?amount=${Math.round(total*100)}`;
-  window.location.href = stripeLink;
-});
-
-updateTotal();
+// initialize
+updateDisplay();
 </script>
 
 </body>
