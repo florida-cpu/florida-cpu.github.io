@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muscle for Hire Movers — Mover Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.header{width:100%;max-width:500px;background:#1a2b5e;padding:20px;border-radius:12px;text-align:center;margin-bottom:20px;color:#fff;}
+.header h1{font-size:1.5rem;margin-bottom:5px;}
+.header p{font-size:0.85rem;color:#8fa3d4;}
+.container{width:100%;max-width:500px;display:flex;flex-direction:column;gap:15px;}
+.card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8ecf4;}
+label{font-weight:600;margin-bottom:6px;display:block;}
+input[type=number], input[type=text]{width:100%;padding:10px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;margin-bottom:10px;outline:none;}
+input[type=number]:focus, input[type=text]:focus{border-color:#1a2b5e;background:#fff;}
+button{padding:12px 18px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:0.2s;}
+button:hover{background:#162048;}
+#total-display{font-size:1.25rem;font-weight:700;margin-top:10px;text-align:center;}
+#qr-code{margin-top:15px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Muscle for Hire Movers</h1>
+  <p>Enter move details & generate payment link</p>
+</div>
+
+<div class="container">
+  <div class="card">
+    <label for="num-movers">Number of Movers</label>
+    <input type="number" id="num-movers" min="1" step="1" value="1">
+
+    <label for="hours">Hours</label>
+    <input type="number" id="hours" min="0" step="0.25" value="1">
+
+    <label for="travel">Travel Fee ($)</label>
+    <input type="number" id="travel" min="0" step="1" value="0">
+
+    <label for="promo">Promo Code (e.g., 5% or 5)</label>
+    <input type="text" id="promo" placeholder="Enter promo code or amount">
+
+    <div id="total-display">Subtotal: $0.00</div>
+    <button onclick="generateLink()">Generate QR Code & Link</button>
+    <div id="qr-code"></div>
+    <div style="text-align:center;margin-top:10px;">
+      <a id="tip-link" href="#" target="_blank"></a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+const PRICE_PER_HOUR = 50;
+
+function parsePromo(promo) {
+  if(!promo) return 0;
+  promo = promo.trim();
+  if(promo.endsWith('%')){
+    let pct = parseFloat(promo);
+    return isNaN(pct) ? 0 : -pct/100; // negative for percent
+  } else {
+    let flat = parseFloat(promo);
+    return isNaN(flat) ? 0 : flat; // flat dollar discount
+  }
+}
+
+function calculateSubtotal() {
+  const movers = parseFloat(document.getElementById('num-movers').value || 0);
+  const hours = parseFloat(document.getElementById('hours').value || 0);
+  const travel = parseFloat(document.getElementById('travel').value || 0);
+  const promoRaw = document.getElementById('promo').value;
+  let subtotal = movers * hours * PRICE_PER_HOUR + travel;
+
+  const promo = parsePromo(promoRaw);
+  if(promo < 0){ // percent
+    subtotal = subtotal * (1 + promo);
+  } else if(promo > 0){ // flat
+    subtotal = subtotal - promo;
+  }
+  return Math.max(0, subtotal);
+}
+
+function updateTotalDisplay() {
+  const subtotal = calculateSubtotal();
+  document.getElementById('total-display').textContent = 'Subtotal: $' + subtotal.toFixed(2);
+}
+
+['num-movers','hours','travel','promo'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', updateTotalDisplay);
+});
+
+updateTotalDisplay();
+
+function generateLink() {
+  const subtotal = calculateSubtotal().toFixed(2);
+  const tipPage = `${window.location.origin}/tip.html?subtotal=${subtotal}`;
+  document.getElementById('tip-link').href = tipPage;
+  document.getElementById('tip-link').textContent = 'Open Tip Page';
+  
+  const qr = new QRious({
+    element: document.createElement('canvas'),
+    value: tipPage,
+    size: 180
+  });
+  const qrDiv = document.getElementById('qr-code');
+  qrDiv.innerHTML = '';
+  qrDiv.appendChild(qr.element);
+}
+</script>
+
+</body>
+</html>

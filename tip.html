@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muscle for Hire Movers — Tip</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.header{width:100%;max-width:500px;background:#1a2b5e;padding:20px;border-radius:12px;text-align:center;margin-bottom:20px;color:#fff;}
+.header h1{font-size:1.5rem;margin-bottom:5px;}
+.header p{font-size:0.85rem;color:#8fa3d4;}
+.container{width:100%;max-width:500px;display:flex;flex-direction:column;gap:15px;}
+.card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8ecf4;}
+.tip-btn{width:100%;padding:14px;border-radius:12px;margin-bottom:10px;border:1px solid #e8ecf4;background:#f4f6f9;font-size:16px;font-weight:600;cursor:pointer;text-align:center;}
+.tip-btn.active{background:#1a2b5e;color:#fff;border-color:#1a2b5e;}
+.tip-btn span{display:block;}
+#custom-amount{width:100%;padding:10px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;margin-bottom:10px;outline:none;}
+#custom-amount:focus{border-color:#1a2b5e;background:#fff;}
+#total-display{font-size:1.25rem;font-weight:700;margin-top:10px;text-align:center;}
+button.pay-btn{width:100%;padding:14px;background:#1a2b5e;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;}
+button.pay-btn:hover{background:#162048;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Muscle for Hire Movers</h1>
+  <p>Add a tip and pay securely</p>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div id="subtotal-display">Subtotal: $0.00</div>
+
+    <button class="tip-btn" onclick="selectTip(0.2)" id="tip-20"><span>20%</span></button>
+    <button class="tip-btn" onclick="selectTip(0.25)" id="tip-25"><span>25%</span></button>
+    <button class="tip-btn" onclick="selectTip(0.3)" id="tip-30"><span>30%</span></button>
+    <button class="tip-btn" onclick="selectTip(0)" id="tip-none"><span>No Tip</span></button>
+
+    <input type="number" id="custom-amount" placeholder="Custom tip" step="0.01" style="display:none;">
+    
+    <div id="total-display">Total: $0.00</div>
+    <button class="pay-btn" onclick="payStripe()">Proceed to Payment</button>
+  </div>
+</div>
+
+<script>
+let urlParams = new URLSearchParams(window.location.search);
+let subtotal = parseFloat(urlParams.get('subtotal') || '0');
+let tipAmount = 0;
+
+document.getElementById('subtotal-display').textContent = 'Subtotal: $' + subtotal.toFixed(2);
+document.getElementById('total-display').textContent = 'Total: $' + subtotal.toFixed(2);
+
+function selectTip(pct) {
+  tipAmount = subtotal * pct;
+  document.querySelectorAll('.tip-btn').forEach(btn=>btn.classList.remove('active'));
+  document.getElementById('custom-amount').style.display = 'none';
+  
+  if(pct === 0 && event.target.id!=='tip-none'){
+    document.getElementById('tip-none').classList.add('active');
+  } else if(event.target.id==='tip-none'){
+    event.target.classList.add('active');
+  } else {
+    event.target.classList.add('active');
+  }
+
+  if(event.target.id==='tip-custom'){
+    document.getElementById('custom-amount').style.display='block';
+    tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
+  }
+  updateTotal();
+}
+
+document.getElementById('custom-amount').addEventListener('input',()=>{
+  tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
+  updateTotal();
+});
+
+function updateTotal(){
+  document.getElementById('total-display').textContent = 'Total: $' + (subtotal + tipAmount).toFixed(2);
+}
+
+function payStripe(){
+  const total = (subtotal + tipAmount).toFixed(2);
+  // Replace with your Stripe Checkout URL or webhook link for actual payment
+  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${Math.round(total*100)}`;
+  window.location.href = stripeLink;
+}
+</script>
+
+</body>
+</html>
