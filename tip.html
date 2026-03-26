@@ -6,20 +6,17 @@
 <title>Muscle for Hire Movers — Tip Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:20px;}
-.header{width:100%;background:#1a2b5e;padding:20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;border-radius:10px;}
-.header-icon{width:40px;height:40px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.header-title{color:#fff;font-weight:700;font-size:1.2rem;}
-.container{width:100%;max-width:420px;display:flex;flex-direction:column;gap:16px;}
-.card{background:#fff;border-radius:16px;padding:24px;border:1px solid #e8ecf4;}
-.section-label{font-size:11px;font-weight:600;color:#1a2b5e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;}
-.tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.tip-btn{background:#f4f6f9;border:1.5px solid #e8ecf4;border-radius:12px;padding:14px;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;}
-.tip-btn .pct{font-size:18px;font-weight:700;display:block;}
-.tip-btn.active{background:#1a2b5e;border-color:#1a2b5e;color:#fff;}
-.total-display{font-weight:700;font-size:20px;color:#1a2b5e;margin-bottom:10px;text-align:right;}
-.pay-btn{width:100%;background:#1a2b5e;color:#fff;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
+  .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .header-icon{font-size:36px;}
+  .header-title{font-weight:700;font-size:1.3rem;}
+  .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
+  .tip-btn{padding:14px;border:none;border-radius:12px;background:#f4f6f9;color:#1a1a2e;font-weight:700;font-size:16px;margin:6px;cursor:pointer;}
+  .tip-btn.active{background:#1a2b5e;color:#fff;}
+  .field-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
+  .total-row{font-weight:700;font-size:1.3rem;margin-top:10px;text-align:right;}
+  .btn{padding:14px;border:none;border-radius:12px;background:#1a8c5b;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -29,57 +26,66 @@ body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;display:fle
   <div class="header-title">Muscle for Hire Movers</div>
 </div>
 
-<div class="container">
-  <div class="card">
-    <p class="section-label">Tip Options</p>
-    <div class="tip-grid">
-      <button class="tip-btn" onclick="selectTip(0.20)">20%</button>
-      <button class="tip-btn" onclick="selectTip(0.25)">25%</button>
-      <button class="tip-btn" onclick="selectTip(0.30)">30%</button>
-      <button class="tip-btn" onclick="selectTip(0)">No Tip</button>
-      <button class="tip-btn" onclick="customTip()">Custom</button>
-    </div>
-    <input type="number" id="custom-input" class="field-input" placeholder="Enter custom tip" style="display:none;margin-top:10px;">
+<div class="card">
+  <div>Subtotal: $<span id="subtotalDisplay">0.00</span></div>
 
-    <div class="total-display">Total: $<span id="total">0.00</span></div>
-    <button class="pay-btn" id="pay-btn" onclick="pay()">Pay with Card</button>
+  <p style="margin-top:12px;font-weight:600;">Select Tip:</p>
+  <button class="tip-btn" onclick="selectTip(20)" id="tip20">20%</button>
+  <button class="tip-btn" onclick="selectTip(25)" id="tip25">25%</button>
+  <button class="tip-btn" onclick="selectTip(30)" id="tip30">30%</button>
+  <button class="tip-btn" onclick="selectTip(0)" id="tip0">No Tip</button>
+  <div style="margin-top:10px;">
+    <input class="field-input" type="number" id="customTip" placeholder="Custom $">
   </div>
+
+  <div class="total-row">Total: $<span id="totalDisplay">0.00</span></div>
+
+  <button class="btn" onclick="pay()">Pay Now</button>
 </div>
 
 <script>
-let urlParams = new URLSearchParams(window.location.search);
-let subtotal = parseFloat(urlParams.get('subtotal')) || 0;
-let tipAmount = 0;
-function fmt(n){return n.toFixed(2);}
-function updateTotal(){
-  document.getElementById('total').textContent = fmt(subtotal + tipAmount);
+function getSubtotal() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const subtotal = parseFloat(urlParams.get('subtotal')) || 0;
+  return subtotal;
 }
 
-function selectTip(pct){
-  tipAmount = subtotal * pct;
-  document.getElementById('custom-input').style.display = 'none';
+let subtotal = getSubtotal();
+let tip = 0;
+document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
+
+function updateTotal() {
+  const total = subtotal + tip;
+  document.getElementById('totalDisplay').textContent = total.toFixed(2);
+}
+
+function clearActive() {
+  ['tip20','tip25','tip30','tip0'].forEach(id=>document.getElementById(id).classList.remove('active'));
+}
+
+function selectTip(pct) {
+  clearActive();
+  if (pct === 0) { tip = 0; document.getElementById('tip0').classList.add('active'); }
+  else { tip = subtotal * (pct/100); document.getElementById('tip'+pct).classList.add('active'); }
+  document.getElementById('customTip').value = '';
   updateTotal();
 }
 
-function customTip(){
-  document.getElementById('custom-input').style.display = 'block';
-  tipAmount = parseFloat(document.getElementById('custom-input').value) || 0;
+document.getElementById('customTip').addEventListener('input', ()=>{
+  tip = parseFloat(document.getElementById('customTip').value) || 0;
+  clearActive();
   updateTotal();
-  document.getElementById('custom-input').addEventListener('input', function(){
-    tipAmount = parseFloat(this.value) || 0;
-    updateTotal();
-  });
-}
+});
 
-function pay(){
-  let totalCents = Math.round((subtotal+tipAmount)*100);
-  // Replace this with your actual Stripe test link
-  let stripeLink = `https://buy.stripe.com/test_link_here?amount=${totalCents}`;
+function pay() {
+  const totalCents = Math.round((subtotal + tip) * 100);
+  // Replace this with your actual Stripe checkout link
+  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${totalCents}`;
   window.location.href = stripeLink;
 }
 
-// Initialize total
 updateTotal();
 </script>
+
 </body>
 </html>
