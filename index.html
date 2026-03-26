@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muscle for Hire Movers — Tip Page</title>
+<title>Muscle for Hire Movers — Mover Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
-  .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-  .header-icon{font-size:36px;}
-  .header-title{font-weight:700;font-size:1.3rem;}
-  .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
-  .tip-btn{padding:14px;border:none;border-radius:12px;background:#f4f6f9;color:#1a1a2e;font-weight:700;font-size:16px;margin:6px;cursor:pointer;}
-  .tip-btn.active{background:#1a2b5e;color:#fff;}
-  .field-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
-  .total-row{font-weight:700;font-size:1.3rem;margin-top:10px;text-align:right;}
-  .btn{padding:14px;border:none;border-radius:12px;background:#1a8c5b;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:12px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:20px;}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.header-icon{font-size:36px;}
+.header-title{font-weight:700;font-size:1.3rem;}
+.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
+.card label{display:block;margin-bottom:6px;font-weight:600;}
+.card input, .card select{width:100%;padding:10px;margin-bottom:12px;border-radius:8px;border:1px solid #e0e0e0;font-size:15px;}
+.total-row{font-weight:700;font-size:1.2rem;margin-top:10px;text-align:right;}
+.btn{padding:14px;border:none;border-radius:12px;background:#1a2b5e;color:#fff;font-weight:700;font-size:16px;cursor:pointer;width:100%;margin-top:10px;}
+.qr-container{text-align:center;margin-top:20px;}
 </style>
 </head>
 <body>
@@ -27,64 +28,73 @@
 </div>
 
 <div class="card">
-  <div>Subtotal: $<span id="subtotalDisplay">0.00</span></div>
+  <label for="numMovers">Number of movers:</label>
+  <input type="number" id="numMovers" value="1" min="1" step="1">
 
-  <p style="margin-top:12px;font-weight:600;">Select Tip:</p>
-  <button class="tip-btn" onclick="selectTip(20)" id="tip20">20%</button>
-  <button class="tip-btn" onclick="selectTip(25)" id="tip25">25%</button>
-  <button class="tip-btn" onclick="selectTip(30)" id="tip30">30%</button>
-  <button class="tip-btn" onclick="selectTip(0)" id="tip0">No Tip</button>
-  <div style="margin-top:10px;">
-    <input class="field-input" type="number" id="customTip" placeholder="Custom $">
-  </div>
+  <label for="hours">Hours worked:</label>
+  <input type="number" id="hours" value="1" min="0.25" step="0.25">
 
-  <div class="total-row">Total: $<span id="totalDisplay">0.00</span></div>
+  <label for="travelFee">Travel fee ($):</label>
+  <input type="number" id="travelFee" value="0" min="0" step="0.01">
 
-  <button class="btn" onclick="pay()">Pay Now</button>
+  <label for="promoValue">Promo (number):</label>
+  <input type="number" id="promoValue" value="0" min="0" step="0.01">
+
+  <label for="promoType">Promo type:</label>
+  <select id="promoType">
+    <option value="flat">Flat $ off</option>
+    <option value="percent">% off</option>
+  </select>
+
+  <div class="total-row">Subtotal: $<span id="subtotalDisplay">0.00</span></div>
+
+  <button class="btn" onclick="generateTipLink()">Generate QR / Link</button>
+</div>
+
+<div class="qr-container">
+  <canvas id="qrcode"></canvas>
+  <div><a href="#" id="tipLink" target="_blank"></a></div>
 </div>
 
 <script>
-function getSubtotal() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const subtotal = parseFloat(urlParams.get('subtotal')) || 0;
-  return subtotal;
+const PRICE_PER_HOUR = 50;
+
+function updateSubtotal() {
+  const movers = parseFloat(document.getElementById('numMovers').value) || 0;
+  const hours = parseFloat(document.getElementById('hours').value) || 0;
+  const travelFee = parseFloat(document.getElementById('travelFee').value) || 0;
+  let subtotal = movers * hours * PRICE_PER_HOUR + travelFee;
+
+  const promoValue = parseFloat(document.getElementById('promoValue').value) || 0;
+  const promoType = document.getElementById('promoType').value;
+
+  if (promoValue > 0) {
+    if (promoType === 'percent') subtotal = subtotal * (1 - promoValue / 100);
+    else subtotal = subtotal - promoValue;
+  }
+  return subtotal.toFixed(2);
 }
 
-let subtotal = getSubtotal();
-let tip = 0;
-document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
+function generateTipLink() {
+  const subtotal = updateSubtotal();
+  document.getElementById('subtotalDisplay').textContent = subtotal;
 
-function updateTotal() {
-  const total = subtotal + tip;
-  document.getElementById('totalDisplay').textContent = total.toFixed(2);
+  const tipPage = `https://florida-cpu.github.io/tip.html?subtotal=${subtotal}`;
+  document.getElementById('tipLink').href = tipPage;
+  document.getElementById('tipLink').textContent = "Go to tip page";
+
+  // Generate QR code
+  QRCode.toCanvas(document.getElementById('qrcode'), tipPage, function (error) {
+    if (error) console.error(error);
+  });
 }
 
-function clearActive() {
-  ['tip20','tip25','tip30','tip0'].forEach(id=>document.getElementById(id).classList.remove('active'));
-}
-
-function selectTip(pct) {
-  clearActive();
-  if (pct === 0) { tip = 0; document.getElementById('tip0').classList.add('active'); }
-  else { tip = subtotal * (pct/100); document.getElementById('tip'+pct).classList.add('active'); }
-  document.getElementById('customTip').value = '';
-  updateTotal();
-}
-
-document.getElementById('customTip').addEventListener('input', ()=>{
-  tip = parseFloat(document.getElementById('customTip').value) || 0;
-  clearActive();
-  updateTotal();
+// Update subtotal on input change
+['numMovers','hours','travelFee','promoValue','promoType'].forEach(id => {
+  document.getElementById(id).addEventListener('input', ()=>{
+    document.getElementById('subtotalDisplay').textContent = updateSubtotal();
+  });
 });
-
-function pay() {
-  const totalCents = Math.round((subtotal + tip) * 100);
-  // Replace this with your actual Stripe checkout link
-  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${totalCents}`;
-  window.location.href = stripeLink;
-}
-
-updateTotal();
 </script>
 
 </body>
