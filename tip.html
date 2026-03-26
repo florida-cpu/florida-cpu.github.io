@@ -28,7 +28,8 @@ document.getElementById('payBtn').addEventListener('click', async () => {
 
   console.log("Sending to Make:", cents);
 
-  const res = await fetch('YOUR_REAL_WEBHOOK_URL_HERE', {
+  const res = await fetch('https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv
+', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
