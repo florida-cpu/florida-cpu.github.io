@@ -79,7 +79,7 @@ updateTotal();
 // Stripe Payment Link with custom amount
 document.getElementById('payBtn').addEventListener('click', ()=>{
   const totalCents = Math.round((subtotal+tip)*100);
-  const stripeLink = `https://buy.stripe.com/test_custom_amount_here?amount=${totalCents}`;
+  const stripeLink = `https://buy.stripe.com/fZu28r9Ab3fU4tgbIXfUQ1g=${totalCents}`;
   window.open(stripeLink,'_blank');
 });
 </script>
