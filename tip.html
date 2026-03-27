@@ -3,298 +3,305 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add a Tip — MoveQuick</title>
+  <title>Add a Tip — Muscle For Hire Movers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
-    :root {
-      --bg:       #0f1117;
-      --surface:  #181c26;
-      --border:   #2a2f3d;
-      --accent:   #f5a623;
-      --accent2:  #e8431a;
-      --text:     #eef0f5;
-      --muted:    #7a8099;
-      --green:    #2ecc71;
-      --red:      #e74c3c;
-      --radius:   6px;
-      --mono:     'DM Mono', monospace;
-      --sans:     'DM Sans', sans-serif;
-      --display:  'Barlow Condensed', sans-serif;
-    }
- 
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
+      font-family: 'Inter', sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      padding: 0 0 3rem;
     }
- 
+
     /* === HEADER === */
-    header {
-      background: var(--surface);
-      border-bottom: 2px solid var(--accent);
-      padding: 16px 24px;
-      display: flex; align-items: center; gap: 12px;
+    .header {
+      width: 100%;
+      background: #1a2b5e;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
     }
-    .logo-badge {
-      width: 38px; height: 38px;
-      background: var(--accent);
-      border-radius: 4px;
+    .header-icon {
+      width: 40px; height: 40px;
+      background: #fff;
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--display); font-size: 20px; font-weight: 800; color: #000;
-      flex-shrink: 0;
+      font-size: 20px;
     }
-    .logo-text { font-family: var(--display); font-size: 24px; font-weight: 700; }
-    .logo-text span { color: var(--accent); }
-    .header-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
- 
+    .header-text { color: #fff; }
+    .header-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
+    .header-sub { font-size: 0.72rem; color: #8fa3d4; letter-spacing: 0.05em; text-transform: uppercase; }
+
     /* === MAIN === */
     main {
-      flex: 1;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 40px 16px 64px;
+      width: 100%;
+      max-width: 480px;
+      padding: 0 1rem;
     }
- 
-    .container { width: 100%; max-width: 460px; }
- 
+
+    /* === CARD === */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid #e8ecf4;
+      margin-bottom: 1rem;
+    }
+    .card:last-child { margin-bottom: 0; }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #1a2b5e;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
     /* === HERO AMOUNT === */
     .hero {
       text-align: center;
-      padding: 36px 24px 28px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 20px;
+      padding: 1.5rem 1.25rem 1.25rem;
     }
     .hero-eyebrow {
-      font-size: 11px;
-      letter-spacing: 0.14em;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+      color: #6b7a99;
+      margin-bottom: 0.5rem;
     }
     .hero-amount {
-      font-family: var(--display);
-      font-size: 64px;
-      font-weight: 800;
+      font-size: 3.8rem;
+      font-weight: 700;
       line-height: 1;
-      color: var(--text);
-      letter-spacing: -0.01em;
+      color: #1a2b5e;
+      letter-spacing: -0.03em;
     }
-    .hero-amount .dollar { font-size: 36px; vertical-align: top; margin-top: 10px; display: inline-block; color: var(--muted); }
+    .hero-amount .dollar {
+      font-size: 2rem;
+      vertical-align: top;
+      margin-top: 0.5rem;
+      display: inline-block;
+      color: #6b7a99;
+      font-weight: 600;
+    }
     .hero-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 8px;
+      font-size: 0.78rem;
+      color: #6b7a99;
+      margin-top: 0.5rem;
     }
- 
-    /* === SECTION LABEL === */
-    .section-label {
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-      padding-left: 2px;
-    }
- 
+
     /* === TIP GRID === */
     .tip-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
     }
     .tip-btn {
-      padding: 16px 8px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
+      padding: 1rem 0.5rem;
+      background: #f4f6f9;
+      border: 1.5px solid #e8ecf4;
+      border-radius: 10px;
+      color: #1a1a2e;
       cursor: pointer;
-      transition: all 0.16s;
+      transition: border-color 0.15s, background 0.15s;
       text-align: center;
+      font-family: 'Inter', sans-serif;
     }
     .tip-btn .pct {
-      font-family: var(--display);
-      font-size: 26px; font-weight: 800;
-      display: block; line-height: 1;
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: block;
+      line-height: 1;
+      color: #1a1a2e;
     }
     .tip-btn .amt {
-      font-family: var(--mono);
-      font-size: 12px; color: var(--muted);
-      display: block; margin-top: 4px;
+      font-size: 0.72rem;
+      color: #6b7a99;
+      display: block;
+      margin-top: 0.3rem;
+      font-weight: 500;
     }
-    .tip-btn:hover { border-color: var(--accent); }
+    .tip-btn:hover {
+      border-color: #1a2b5e;
+      background: #edf0f8;
+    }
     .tip-btn.active {
-      border-color: var(--accent);
-      background: rgba(245,166,35,0.1);
+      border-color: #1a2b5e;
+      background: #edf0f8;
     }
-    .tip-btn.active .pct { color: var(--accent); }
-    .tip-btn.active .amt { color: var(--accent); }
- 
+    .tip-btn.active .pct { color: #1a2b5e; }
+    .tip-btn.active .amt { color: #1a2b5e; }
+
     .tip-row-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
     }
-    .tip-btn.no-tip .pct { font-size: 20px; }
- 
+    .tip-btn.no-tip .pct { font-size: 1.05rem; }
+
     /* === CUSTOM TIP === */
     .custom-row {
       display: none;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
     }
     .custom-row.visible { display: flex; }
     .custom-prefix {
-      font-family: var(--mono);
-      font-size: 18px;
-      color: var(--muted);
+      font-size: 1.1rem;
+      color: #6b7a99;
+      font-weight: 600;
       flex-shrink: 0;
     }
     .custom-row input {
       flex: 1;
-      background: var(--bg);
-      border: 2px solid var(--accent);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 22px;
-      padding: 12px 14px;
+      background: #f4f6f9;
+      border: 1.5px solid #1a2b5e;
+      border-radius: 10px;
+      color: #1a1a2e;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0.85rem 1rem;
       outline: none;
+      transition: border-color 0.15s, background 0.15s;
     }
-    .custom-row input::placeholder { color: var(--muted); }
- 
-    /* === TOTAL DISPLAY === */
-    .total-display {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 20px;
+    .custom-row input:focus { background: #fff; }
+    .custom-row input::placeholder { color: #b0bbd4; }
+
+    /* === TOTAL BREAKDOWN === */
+    .breakdown {
+      background: #f4f6f9;
+      border: 1px solid #e8ecf4;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1.25rem;
     }
+    .amount-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0; border-bottom: 1px solid #edf0f8;
+      font-size: 0.88rem;
+    }
+    .amount-row:last-of-type { border-bottom: none; }
+    .amount-label { color: #6b7a99; }
+    .amount-value { color: #1a1a2e; font-weight: 500; }
+
     .total-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 5px 0;
+      padding: 0.9rem 0 0; margin-top: 0.4rem;
+      border-top: 2px solid #1a2b5e;
     }
-    .total-row .lbl { font-size: 13px; color: var(--muted); }
-    .total-row .val { font-family: var(--mono); font-size: 14px; color: var(--text); }
-    .total-row.final {
-      border-top: 1px solid var(--border);
-      margin-top: 8px; padding-top: 14px;
-    }
-    .total-row.final .lbl {
-      font-family: var(--display);
-      font-size: 17px; font-weight: 700; color: var(--text);
-      letter-spacing: 0.04em; text-transform: uppercase;
-    }
-    .total-row.final .val {
-      font-family: var(--display);
-      font-size: 32px; font-weight: 800;
-      color: var(--green);
-    }
- 
+    .total-label { font-size: 1rem; font-weight: 600; color: #1a1a2e; }
+    .total-value { font-size: 1.6rem; font-weight: 700; color: #1a2b5e; letter-spacing: -0.02em; }
+
     /* === PAY BUTTON === */
     .btn-pay {
       width: 100%;
-      padding: 18px;
-      background: var(--green);
-      color: #000;
+      padding: 1.05rem;
+      background: #1a8c5b;
+      color: #fff;
       border: none;
-      border-radius: var(--radius);
-      font-family: var(--display);
-      font-size: 22px; font-weight: 800;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
       cursor: pointer;
-      transition: background 0.18s, transform 0.12s, opacity 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.15s, transform 0.1s, opacity 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
     }
-    .btn-pay:hover:not(:disabled) { background: #27ae60; transform: translateY(-1px); }
-    .btn-pay:active:not(:disabled) { transform: translateY(0); }
+    .btn-pay:hover:not(:disabled) { background: #157a4e; transform: scale(0.99); }
+    .btn-pay:active:not(:disabled) { transform: scale(0.97); }
     .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
- 
+
     .btn-pay .spinner {
-      width: 20px; height: 20px;
-      border: 3px solid rgba(0,0,0,0.3);
-      border-top-color: #000;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       display: none;
     }
     .btn-pay.loading .spinner { display: block; }
     .btn-pay.loading .btn-label { display: none; }
- 
+
     @keyframes spin { to { transform: rotate(360deg); } }
- 
-    /* === ERROR / STATUS === */
+
+    /* === STATUS MESSAGES === */
     .status-msg {
       display: none;
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      margin-top: 14px;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      margin-top: 0.9rem;
       line-height: 1.5;
     }
     .status-msg.error {
       display: block;
-      background: rgba(231,76,60,0.12);
-      border: 1px solid var(--red);
-      color: var(--red);
+      background: rgba(192,57,43,0.08);
+      border: 1px solid #c0392b;
+      color: #c0392b;
     }
     .status-msg.info {
       display: block;
-      background: rgba(245,166,35,0.1);
-      border: 1px solid var(--accent);
-      color: var(--accent);
+      background: #edf0f8;
+      border: 1px solid #1a2b5e;
+      color: #1a2b5e;
     }
- 
+
     /* === MISSING SUBTOTAL === */
     .missing-state {
       text-align: center;
-      padding: 60px 24px;
+      padding: 3.5rem 1.5rem;
     }
-    .missing-state .icon { font-size: 52px; margin-bottom: 16px; }
+    .missing-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
     .missing-state h2 {
-      font-family: var(--display); font-size: 26px; font-weight: 700;
-      color: var(--text); margin-bottom: 10px;
+      font-size: 1.2rem; font-weight: 700;
+      color: #1a1a2e; margin-bottom: 0.6rem;
     }
-    .missing-state p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .missing-state p { font-size: 0.85rem; color: #6b7a99; line-height: 1.65; }
     .missing-state a {
-      display: inline-block; margin-top: 20px;
-      padding: 12px 28px;
-      background: var(--accent); color: #000;
-      border-radius: var(--radius);
-      font-family: var(--display); font-size: 16px; font-weight: 700;
+      display: inline-block; margin-top: 1.25rem;
+      padding: 0.85rem 1.75rem;
+      background: #1a2b5e; color: #fff;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; font-weight: 700;
       text-decoration: none;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      letter-spacing: -0.01em;
+      transition: background 0.15s;
     }
- 
-    /* === DIVIDER === */
-    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .missing-state a:hover { background: #253f8a; }
   </style>
 </head>
 <body>
- 
-<header>
-  <div class="logo-badge">M</div>
-  <div>
-    <div class="logo-text">MOVE<span>QUICK</span></div>
+
+<div class="header">
+  <div class="header-icon">💪</div>
+  <div class="header-text">
+    <div class="header-title">Muscle For Hire Movers</div>
     <div class="header-sub">Tip &amp; Payment</div>
   </div>
-</header>
- 
+</div>
+
 <main>
-  <div class="container">
- 
-    <!-- ── MISSING SUBTOTAL STATE ── -->
+
+  <!-- ── MISSING SUBTOTAL STATE ── -->
+  <div class="card">
     <div class="missing-state" id="missing-state" style="display:none;">
       <div class="icon">⚠️</div>
       <h2>No Subtotal Found</h2>
@@ -303,10 +310,10 @@
          generate a fresh tip link.</p>
       <a href="index.html">← Back to Calculator</a>
     </div>
- 
+
     <!-- ── MAIN TIP UI ── -->
     <div id="tip-ui">
- 
+
       <!-- Subtotal hero -->
       <div class="hero">
         <div class="hero-eyebrow">Your Move Total</div>
@@ -315,9 +322,9 @@
         </div>
         <div class="hero-label">Before tip</div>
       </div>
- 
+
       <!-- Tip selection -->
-      <div class="section-label">Choose a Tip</div>
+      <p class="section-label">Choose a Tip</p>
       <div class="tip-grid">
         <button class="tip-btn" data-pct="20" onclick="selectTip(20)">
           <span class="pct">20%</span>
@@ -342,7 +349,7 @@
           <span class="amt">Enter amount</span>
         </button>
       </div>
- 
+
       <!-- Custom input -->
       <div class="custom-row" id="custom-row">
         <span class="custom-prefix">$</span>
@@ -355,103 +362,89 @@
           oninput="updateCustom()"
         />
       </div>
- 
+
       <!-- Total breakdown -->
-      <div class="total-display">
-        <div class="total-row">
-          <span class="lbl">Move subtotal</span>
-          <span class="val" id="total-subtotal">$0.00</span>
+      <div class="breakdown">
+        <div class="amount-row">
+          <span class="amount-label">Move subtotal</span>
+          <span class="amount-value" id="total-subtotal">$0.00</span>
+        </div>
+        <div class="amount-row">
+          <span class="amount-label" id="tip-label">Tip (0%)</span>
+          <span class="amount-value" id="tip-amount">$0.00</span>
         </div>
         <div class="total-row">
-          <span class="lbl" id="tip-label">Tip (0%)</span>
-          <span class="val" id="tip-amount">$0.00</span>
-        </div>
-        <div class="total-row final">
-          <span class="lbl">Total Due</span>
-          <span class="val" id="final-total">$0.00</span>
+          <span class="total-label">Total Due</span>
+          <span class="total-value" id="final-total">$0.00</span>
         </div>
       </div>
- 
+
       <!-- Pay button -->
       <button class="btn-pay" id="pay-btn" onclick="handlePay()">
         <span class="btn-label">💳 Pay Now</span>
         <div class="spinner"></div>
       </button>
- 
+
       <!-- Status messages -->
       <div class="status-msg" id="status-msg"></div>
- 
+
     </div><!-- /tip-ui -->
- 
   </div>
+
 </main>
- 
+
 <script>
   // ══════════════════════════════════════════════
   // ⚙️  CONFIGURATION — UPDATE THIS URL
   // ══════════════════════════════════════════════
   const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv';
   // ══════════════════════════════════════════════
- 
-  // ──────────────────────────────────────────────
-  // STATE
-  // ──────────────────────────────────────────────
+
   let subtotal    = 0;
   let tipAmount   = 0;
-  let tipMode     = 'pct'; // 'pct' | 'custom' | 'none'
-  let selectedPct = 20;    // default
- 
-  // ──────────────────────────────────────────────
-  // INIT — READ URL PARAM
-  // ──────────────────────────────────────────────
+  let tipMode     = 'pct';
+  let selectedPct = 20;
+
   (function init() {
     const params = new URLSearchParams(window.location.search);
     const raw    = params.get('subtotal');
- 
+
     if (!raw || isNaN(parseFloat(raw))) {
-      document.getElementById('tip-ui').style.display     = 'none';
+      document.getElementById('tip-ui').style.display        = 'none';
       document.getElementById('missing-state').style.display = 'block';
       return;
     }
- 
+
     subtotal = Math.max(0, parseFloat(raw));
     document.getElementById('subtotal-display').textContent = subtotal.toFixed(2);
     document.getElementById('total-subtotal').textContent   = '$' + subtotal.toFixed(2);
- 
-    // Pre-fill percentage button amounts
+
     [20, 25, 30].forEach(p => {
       document.getElementById(`amt-${p}`).textContent =
         '$' + (subtotal * p / 100).toFixed(2);
     });
- 
-    // Default selection: 20%
+
     selectTip(20);
   })();
- 
-  // ──────────────────────────────────────────────
-  // TIP SELECTION
-  // ──────────────────────────────────────────────
+
   function selectTip(pct) {
     tipMode     = pct === 0 ? 'none' : 'pct';
     selectedPct = pct;
     tipAmount   = pct === 0 ? 0 : subtotal * pct / 100;
- 
-    // Update button states
+
     document.querySelectorAll('.tip-btn').forEach(btn => {
       const d = btn.getAttribute('data-pct');
       btn.classList.toggle('active',
-        pct === 0  ? d === '0'
-        : d === String(pct)
+        pct === 0 ? d === '0' : d === String(pct)
       );
     });
- 
-    // Hide custom input
+
     document.getElementById('custom-row').classList.remove('visible');
     document.getElementById('custom-input').value = '';
- 
+
     updateTotals();
   }
- 
+
   function selectCustom() {
     tipMode = 'custom';
     document.querySelectorAll('.tip-btn').forEach(btn => {
@@ -462,41 +455,35 @@
     tipAmount = 0;
     updateTotals();
   }
- 
+
   function updateCustom() {
     const v = parseFloat(document.getElementById('custom-input').value);
     tipAmount = isNaN(v) ? 0 : Math.max(0, v);
     updateTotals();
   }
- 
-  // ──────────────────────────────────────────────
-  // UPDATE TOTAL DISPLAY
-  // ──────────────────────────────────────────────
+
   function updateTotals() {
     const total = subtotal + tipAmount;
- 
+
     let tipLabelText = 'Tip';
     if (tipMode === 'pct' && selectedPct > 0)  tipLabelText = `Tip (${selectedPct}%)`;
     else if (tipMode === 'none')                tipLabelText = 'No tip';
     else if (tipMode === 'custom')              tipLabelText = 'Custom tip';
- 
-    document.getElementById('tip-label').textContent  = tipLabelText;
-    document.getElementById('tip-amount').textContent = '$' + tipAmount.toFixed(2);
+
+    document.getElementById('tip-label').textContent   = tipLabelText;
+    document.getElementById('tip-amount').textContent  = '$' + tipAmount.toFixed(2);
     document.getElementById('final-total').textContent = '$' + total.toFixed(2);
   }
- 
-  // ──────────────────────────────────────────────
-  // PAY HANDLER → MAKE.COM WEBHOOK → STRIPE
-  // ──────────────────────────────────────────────
+
   async function handlePay() {
-    const total     = subtotal + tipAmount;
+    const total      = subtotal + tipAmount;
     const totalCents = Math.round(total * 100);
- 
+
     if (totalCents < 50) {
       showStatus('Minimum charge is $0.50. Please add a tip or return to the calculator.', 'error');
       return;
     }
- 
+
     if (MAKE_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID_HERE')) {
       showStatus(
         '⚠️ Webhook not configured. Open tip.html and set MAKE_WEBHOOK_URL to your Make.com webhook URL.',
@@ -504,16 +491,16 @@
       );
       return;
     }
- 
+
     setLoading(true);
     hideStatus();
- 
+
     try {
       const response = await fetch(MAKE_WEBHOOK_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount_cents:  totalCents,
+          amount_cents:   totalCents,
           subtotal_cents: Math.round(subtotal * 100),
           tip_cents:      Math.round(tipAmount * 100),
           subtotal:       subtotal.toFixed(2),
@@ -523,44 +510,36 @@
           description:    `Moving service — $${subtotal.toFixed(2)} + $${tipAmount.toFixed(2)} tip`
         })
       });
- 
-      if (!response.ok) {
-        throw new Error(`Webhook returned HTTP ${response.status}`);
-      }
- 
+
+      if (!response.ok) throw new Error(`Webhook returned HTTP ${response.status}`);
+
       const data = await response.json();
- 
-      // Make.com should return { url: "https://checkout.stripe.com/..." }
       const checkoutUrl = data.url || data.checkout_url || data.payment_url;
- 
+
       if (!checkoutUrl) {
         throw new Error('No payment URL returned from webhook. Check your Make.com scenario configuration.');
       }
- 
-      // Redirect to Stripe Checkout
+
       window.location.href = checkoutUrl;
- 
+
     } catch (err) {
       setLoading(false);
       showStatus(`Payment error: ${err.message}`, 'error');
     }
   }
- 
-  // ──────────────────────────────────────────────
-  // UI HELPERS
-  // ──────────────────────────────────────────────
+
   function setLoading(on) {
     const btn = document.getElementById('pay-btn');
     btn.disabled = on;
     btn.classList.toggle('loading', on);
   }
- 
+
   function showStatus(msg, type) {
     const el = document.getElementById('status-msg');
     el.textContent = msg;
     el.className   = `status-msg ${type}`;
   }
- 
+
   function hideStatus() {
     const el = document.getElementById('status-msg');
     el.style.display = 'none';
