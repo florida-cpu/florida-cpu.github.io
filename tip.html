@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Muscle For Hire Movers — Tip Page</title>
+  <title>Add a Tip — Muscle For Hire Movers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -11,7 +11,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f4f6f9;
+      background-color: #f4f6f9;
       color: #1a1a2e;
       min-height: 100vh;
       display: flex;
@@ -21,7 +21,7 @@
     }
 
     /* HEADER */
-    .header {
+    header {
       width: 100%;
       background: #1a2b5e;
       padding: 1.25rem 1.5rem;
@@ -30,49 +30,80 @@
       justify-content: center;
       gap: 0.75rem;
       margin-bottom: 1.75rem;
+      color: #fff;
     }
-    .header-icon {
+    .logo-badge {
       width: 40px; height: 40px;
       background: #fff;
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px;
+      font-weight: 700;
+      color: #1a2b5e;
     }
-    .header-text { color: #fff; }
-    .header-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
-    .header-sub { font-size: 0.72rem; color: #8fa3d4; letter-spacing: 0.05em; text-transform: uppercase; }
+    .logo-text {
+      font-size: 1.1rem; font-weight: 700;
+    }
+    .logo-text span { color: #edf0f8; }
+    .header-sub {
+      font-size: 0.72rem;
+      color: #8fa3d4;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
 
-    .outer {
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
       width: 100%;
       max-width: 480px;
-      padding: 0 1rem;
+      padding: 1rem;
     }
 
-    /* CARD */
     .card {
       background: #fff;
       border-radius: 16px;
       padding: 1.5rem;
       border: 1px solid #e8ecf4;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
+    .hero {
+      text-align: center;
+      padding: 2rem 1rem 1.5rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      color: #6b7a99;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .hero-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .hero-amount .dollar { font-size: 1.5rem; vertical-align: top; color: #6b7a99; }
+    .hero-label { font-size: 0.82rem; color: #6b7a99; margin-top: 0.5rem; }
+
+    /* TIP GRID */
     .section-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       color: #1a2b5e;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
-    /* TIP GRID */
-    .tip-grid {
+    .tip-grid, .tip-row-2 {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 0.75rem;
       margin-bottom: 1rem;
     }
+    .tip-grid { grid-template-columns: repeat(3, 1fr); }
+    .tip-row-2 { grid-template-columns: 1fr 1fr; }
 
     .tip-btn {
       background: #f4f6f9;
@@ -84,47 +115,61 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .tip-btn:hover { background: #1a2b5e; color: #fff; border-color: #1a2b5e; }
-    .tip-btn.active { background: #1a2b5e; color: #fff; border-color: #1a2b5e; }
-
+    .tip-btn:hover {
+      background: #1a2b5e;
+      color: #fff;
+      border-color: #1a2b5e;
+    }
+    .tip-btn.active {
+      background: #1a2b5e;
+      color: #fff;
+      border-color: #1a2b5e;
+    }
     .tip-btn .pct { font-size: 1.25rem; display: block; }
-    .tip-btn .amt { font-size: 0.85rem; color: #6b7a99; margin-top: 0.25rem; }
-    .tip-btn.active .amt { color: #fff; }
+    .tip-btn .amt { font-size: 0.82rem; color: #6b7a99; display: block; margin-top: 0.25rem; }
 
-    /* CUSTOM TIP */
+    /* CUSTOM TIP INPUT */
     .custom-row {
       display: none;
-      margin-bottom: 1rem;
       gap: 0.5rem;
+      margin-bottom: 1rem;
       align-items: center;
     }
     .custom-row.visible { display: flex; }
-    .custom-row span { font-weight: 600; font-size: 1rem; }
+    .custom-prefix { font-size: 1rem; color: #6b7a99; }
     .custom-row input {
       flex: 1;
-      padding: 0.85rem 1rem;
-      font-size: 0.95rem;
-      border-radius: 10px;
-      border: 1.5px solid #e8ecf4;
-      outline: none;
       background: #fff;
+      border: 1.5px solid #e8ecf4;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      color: #1a1a2e;
     }
-    .custom-row input:focus { border-color: #1a2b5e; }
 
     /* TOTAL DISPLAY */
     .total-display {
       background: #f4f6f9;
       border: 1px solid #e8ecf4;
       border-radius: 12px;
-      padding: 1rem 1.1rem;
+      padding: 1rem;
       margin-bottom: 1rem;
     }
-    .total-row { display: flex; justify-content: space-between; padding: 0.5rem 0; }
-    .total-row.final { border-top: 2px solid #1a2b5e; margin-top: 0.5rem; padding-top: 0.5rem; }
-    .total-row .lbl { color: #6b7a99; font-weight: 600; }
-    .total-row.final .lbl { color: #1a1a2e; font-size: 1rem; font-weight: 700; }
-    .total-row .val { font-weight: 600; }
-    .total-row.final .val { color: #1a2b5e; font-size: 1.5rem; font-weight: 700; }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+    }
+    .total-row.final {
+      border-top: 2px solid #1a2b5e;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+    }
+    .total-row .lbl { font-size: 0.82rem; color: #6b7a99; }
+    .total-row .val { font-size: 0.95rem; font-weight: 600; color: #1a1a2e; }
+    .total-row.final .lbl { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
+    .total-row.final .val { font-size: 1.5rem; font-weight: 700; color: #1a2b5e; }
 
     /* PAY BUTTON */
     .btn-pay {
@@ -135,177 +180,214 @@
       border: none;
       border-radius: 12px;
       font-weight: 700;
-      cursor: pointer;
       font-size: 1rem;
+      cursor: pointer;
       transition: background 0.15s, transform 0.1s;
     }
     .btn-pay:hover { background: #253f8a; transform: scale(0.98); }
-    .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-pay:active { transform: scale(0.96); }
+    .btn-pay:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-pay .spinner {
+      width: 20px; height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn-pay.loading .spinner { display: block; }
+    .btn-pay.loading .btn-label { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* STATUS MESSAGE */
     .status-msg {
       display: none;
       padding: 0.75rem 1rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       margin-top: 0.75rem;
+      line-height: 1.4;
     }
-    .status-msg.error { display: block; background: #fdd; color: #c0392b; border: 1px solid #c0392b; }
-    .status-msg.info { display: block; background: #f0e6d6; color: #f5a623; border: 1px solid #f5a623; }
+    .status-msg.error { display: block; background: #fdecea; border: 1px solid #c0392b; color: #c0392b; }
+    .status-msg.info { display: block; background: #f0f4ff; border: 1px solid #1a2b5e; color: #1a2b5e; }
 
     /* MISSING SUBTOTAL */
-    .missing-state {
-      text-align: center;
-      padding: 3rem 1rem;
-    }
-    .missing-state h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .missing-state p { font-size: 0.9rem; color: #6b7a99; line-height: 1.5; margin-bottom: 1rem; }
+    .missing-state { text-align: center; padding: 3rem 1rem; }
+    .missing-state .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .missing-state h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .missing-state p { font-size: 0.9rem; color: #6b7a99; line-height: 1.5; }
     .missing-state a {
+      display: inline-block; margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      background: #1a2b5e;
-      color: #fff;
-      border-radius: 12px;
-      font-weight: 700;
+      background: #1a2b5e; color: #fff;
+      border-radius: 12px; font-weight: 700;
       text-decoration: none;
-      font-size: 0.9rem;
+      transition: background 0.15s;
     }
+    .missing-state a:hover { background: #253f8a; }
+
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="header-icon">💪</div>
-    <div class="header-text">
-      <div class="header-title">Muscle For Hire Movers</div>
-      <div class="header-sub">Tip Page</div>
-    </div>
+<header>
+  <div class="logo-badge">M</div>
+  <div>
+    <div class="logo-text">Muscle<span>For Hire</span></div>
+    <div class="header-sub">Tip & Payment</div>
   </div>
+</header>
 
-  <div class="outer">
-    <!-- MISSING STATE -->
+<main>
+  <div class="card" id="tip-ui">
+
+    <!-- MISSING SUBTOTAL -->
     <div class="missing-state" id="missing-state" style="display:none;">
+      <div class="icon">⚠️</div>
       <h2>No Subtotal Found</h2>
-      <p>This page requires a subtotal in the URL.<br/>Please go back to the calculator and generate a fresh tip link.</p>
+      <p>This page requires a subtotal in the URL.<br/>
+         Please go back to the quote calculator and<br/>
+         generate a fresh tip link.</p>
       <a href="index.html">← Back to Calculator</a>
     </div>
 
-    <!-- TIP UI -->
-    <div id="tip-ui" class="card">
-      <p class="section-label">Your Move Total</p>
-      <div class="total-row final">
-        <span class="lbl">Subtotal</span>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">Your Move Total</div>
+      <div class="hero-amount"><span class="dollar">$</span><span id="subtotal-display">0</span></div>
+      <div class="hero-label">Before tip</div>
+    </div>
+
+    <!-- TIP SELECTION -->
+    <p class="section-label">Choose a Tip</p>
+    <div class="tip-grid">
+      <button class="tip-btn" data-pct="20" onclick="selectTip(20)">
+        <span class="pct">20%</span>
+        <span class="amt" id="amt-20">$0.00</span>
+      </button>
+      <button class="tip-btn" data-pct="25" onclick="selectTip(25)">
+        <span class="pct">25%</span>
+        <span class="amt" id="amt-25">$0.00</span>
+      </button>
+      <button class="tip-btn" data-pct="30" onclick="selectTip(30)">
+        <span class="pct">30%</span>
+        <span class="amt" id="amt-30">$0.00</span>
+      </button>
+    </div>
+    <div class="tip-row-2">
+      <button class="tip-btn no-tip" data-pct="0" onclick="selectTip(0)">
+        <span class="pct">No Tip</span>
+        <span class="amt">$0.00</span>
+      </button>
+      <button class="tip-btn" data-pct="custom" onclick="selectCustom()">
+        <span class="pct">Custom</span>
+        <span class="amt">Enter amount</span>
+      </button>
+    </div>
+
+    <div class="custom-row" id="custom-row">
+      <span class="custom-prefix">$</span>
+      <input type="number" id="custom-input" placeholder="0.00" min="0" step="0.01" oninput="updateCustom()"/>
+    </div>
+
+    <!-- TOTAL DISPLAY -->
+    <div class="total-display">
+      <div class="total-row">
+        <span class="lbl">Move subtotal</span>
         <span class="val" id="total-subtotal">$0.00</span>
       </div>
-
-      <p class="section-label">Choose a Tip</p>
-      <div class="tip-grid">
-        <button class="tip-btn" data-pct="20" onclick="selectTip(20)">
-          <span class="pct">20%</span>
-          <span class="amt" id="amt-20">$0.00</span>
-        </button>
-        <button class="tip-btn" data-pct="25" onclick="selectTip(25)">
-          <span class="pct">25%</span>
-          <span class="amt" id="amt-25">$0.00</span>
-        </button>
-        <button class="tip-btn" data-pct="30" onclick="selectTip(30)">
-          <span class="pct">30%</span>
-          <span class="amt" id="amt-30">$0.00</span>
-        </button>
+      <div class="total-row">
+        <span class="lbl" id="tip-label">Tip (0%)</span>
+        <span class="val" id="tip-amount">$0.00</span>
       </div>
-
-      <div class="tip-grid">
-        <button class="tip-btn" data-pct="0" onclick="selectTip(0)">
-          <span class="pct">No Tip</span>
-          <span class="amt">$0.00</span>
-        </button>
-        <button class="tip-btn" data-pct="custom" onclick="selectCustom()">
-          <span class="pct">Custom</span>
-          <span class="amt">Enter Amount</span>
-        </button>
+      <div class="total-row final">
+        <span class="lbl">Total Due</span>
+        <span class="val" id="final-total">$0.00</span>
       </div>
-
-      <div class="custom-row" id="custom-row">
-        <span>$</span>
-        <input type="number" id="custom-input" placeholder="0.00" min="0" step="0.01" oninput="updateCustom()" />
-      </div>
-
-      <div class="total-display">
-        <div class="total-row">
-          <span class="lbl" id="tip-label">Tip (0%)</span>
-          <span class="val" id="tip-amount">$0.00</span>
-        </div>
-        <div class="total-row final">
-          <span class="lbl">Total Due</span>
-          <span class="val" id="final-total">$0.00</span>
-        </div>
-      </div>
-
-      <button class="btn-pay" id="pay-btn" onclick="handlePay()">💳 Pay Now</button>
-      <div class="status-msg" id="status-msg"></div>
     </div>
+
+    <button class="btn-pay" id="pay-btn" onclick="handlePay()">
+      <span class="btn-label">💳 Pay Now</span>
+      <div class="spinner"></div>
+    </button>
+
+    <div class="status-msg" id="status-msg"></div>
+
   </div>
+</main>
 
-  <script>
-    const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv';
-    let subtotal = 0, tipAmount = 0, tipMode = 'pct', selectedPct = 20;
+<script>
+  // Keep your original JS exactly as it was
+  const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv';
+  let subtotal = 0, tipAmount = 0, tipMode = 'pct', selectedPct = 20;
 
-    (function init() {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get('subtotal');
-      if (!raw || isNaN(parseFloat(raw))) {
-        document.getElementById('tip-ui').style.display = 'none';
-        document.getElementById('missing-state').style.display = 'block';
-        return;
-      }
-      subtotal = Math.max(0, parseFloat(raw));
-      document.getElementById('total-subtotal').textContent = '$' + subtotal.toFixed(2);
-      [20,25,30].forEach(p => {
-        document.getElementById(`amt-${p}`).textContent = '$' + (subtotal * p / 100).toFixed(2);
-      });
-      selectTip(20);
-    })();
-
-    function selectTip(pct){
-      tipMode = pct===0?'none':'pct'; selectedPct = pct;
-      tipAmount = pct===0?0:subtotal*pct/100;
-      document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-pct')==pct));
-      document.getElementById('custom-row').classList.remove('visible');
-      document.getElementById('custom-input').value='';
-      updateTotals();
+  (function init() {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get('subtotal');
+    if (!raw || isNaN(parseFloat(raw))) {
+      document.getElementById('tip-ui').style.display = 'none';
+      document.getElementById('missing-state').style.display = 'block';
+      return;
     }
+    subtotal = Math.max(0, parseFloat(raw));
+    document.getElementById('subtotal-display').textContent = subtotal.toFixed(2);
+    document.getElementById('total-subtotal').textContent = '$' + subtotal.toFixed(2);
+    [20,25,30].forEach(p => document.getElementById(`amt-${p}`).textContent = '$' + (subtotal * p / 100).toFixed(2));
+    selectTip(20);
+  })();
 
-    function selectCustom(){
-      tipMode='custom'; tipAmount=0;
-      document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-pct')==='custom'));
-      document.getElementById('custom-row').classList.add('visible');
-      document.getElementById('custom-input').focus();
-      updateTotals();
+  function selectTip(pct){
+    tipMode = pct===0?'none':'pct'; selectedPct = pct;
+    tipAmount = pct===0?0:subtotal*pct/100;
+    document.querySelectorAll('.tip-btn').forEach(btn=>{
+      const d = btn.getAttribute('data-pct');
+      btn.classList.toggle('active', pct===0?d==='0':d===String(pct));
+    });
+    document.getElementById('custom-row').classList.remove('visible');
+    document.getElementById('custom-input').value='';
+    updateTotals();
+  }
+
+  function selectCustom(){
+    tipMode='custom';
+    document.querySelectorAll('.tip-btn').forEach(btn=>{
+      btn.classList.toggle('active', btn.getAttribute('data-pct')==='custom');
+    });
+    document.getElementById('custom-row').classList.add('visible');
+    document.getElementById('custom-input').focus();
+    tipAmount=0; updateTotals();
+  }
+
+  function updateCustom(){
+    const v=parseFloat(document.getElementById('custom-input').value);
+    tipAmount=isNaN(v)?0:Math.max(0,v);
+    updateTotals();
+  }
+
+  function updateTotals(){
+    const total=subtotal+tipAmount;
+    let tipLabelText='Tip';
+    if(tipMode==='pct'&&selectedPct>0) tipLabelText=`Tip (${selectedPct}%)`;
+    else if(tipMode==='none') tipLabelText='No tip';
+    else if(tipMode==='custom') tipLabelText='Custom tip';
+    document.getElementById('tip-label').textContent=tipLabelText;
+    document.getElementById('tip-amount').textContent='$'+tipAmount.toFixed(2);
+    document.getElementById('final-total').textContent='$'+total.toFixed(2);
+  }
+
+  async function handlePay(){
+    const total=subtotal+tipAmount;
+    const totalCents=Math.round(total*100);
+    if(totalCents<50){showStatus('Minimum charge is $0.50. Please add a tip or return to the calculator.','error'); return;}
+    if(MAKE_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID_HERE')){
+      showStatus('⚠️ Webhook not configured. Open tip.html and set MAKE_WEBHOOK_URL to your Make.com webhook URL.','error'); return;
     }
-
-    function updateCustom(){
-      const v=parseFloat(document.getElementById('custom-input').value);
-      tipAmount = isNaN(v)?0:Math.max(0,v);
-      updateTotals();
-    }
-
-    function updateTotals(){
-      const total=subtotal+tipAmount;
-      let tipLabel='Tip';
-      if(tipMode==='pct' && selectedPct>0) tipLabel=`Tip (${selectedPct}%)`;
-      else if(tipMode==='none') tipLabel='No tip';
-      else if(tipMode==='custom') tipLabel='Custom tip';
-      document.getElementById('tip-label').textContent=tipLabel;
-      document.getElementById('tip-amount').textContent='$'+tipAmount.toFixed(2);
-      document.getElementById('final-total').textContent='$'+total.toFixed(2);
-    }
-
-    async function handlePay(){
-      const total=subtotal+tipAmount;
-      const totalCents=Math.round(total*100);
-      if(totalCents<50){ showStatus('Minimum $0.50 required','error'); return; }
-      setLoading(true); hideStatus();
-      try{
-        const res=await fetch(MAKE_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    setLoading(true); hideStatus();
+    try{
+      const response=await fetch(MAKE_WEBHOOK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
           amount_cents: totalCents,
           subtotal_cents: Math.round(subtotal*100),
           tip_cents: Math.round(tipAmount*100),
@@ -314,19 +396,24 @@
           total: total.toFixed(2),
           currency:'usd',
           description:`Moving service — $${subtotal.toFixed(2)} + $${tipAmount.toFixed(2)} tip`
-        })});
-        if(!res.ok) throw new Error('Webhook error '+res.status);
-        const data=await res.json();
-        const url=data.url || data.checkout_url || data.payment_url;
-        if(!url) throw new Error('No payment URL returned');
-        window.location.href=url;
-      } catch(err){ setLoading(false); showStatus('Payment error: '+err.message,'error'); }
-    }
+        })
+      });
+      if(!response.ok) throw new Error(`Webhook returned HTTP ${response.status}`);
+      const data=await response.json();
+      const checkoutUrl=data.url||data.checkout_url||data.payment_url;
+      if(!checkoutUrl) throw new Error('No payment URL returned from webhook. Check your Make.com scenario configuration.');
+      window.location.href=checkoutUrl;
+    }catch(err){setLoading(false); showStatus(`Payment error: ${err.message}`,'error');}
+  }
 
-    function setLoading(on){ const btn=document.getElementById('pay-btn'); btn.disabled=on; }
-    function showStatus(msg,type){ const el=document.getElementById('status-msg'); el.textContent=msg; el.className=`status-msg ${type}`; el.style.display='block'; }
-    function hideStatus(){ const el=document.getElementById('status-msg'); el.style.display='none'; }
-  </script>
+  function setLoading(on){
+    const btn=document.getElementById('pay-btn'); btn.disabled=on; btn.classList.toggle('loading',on);
+  }
+  function showStatus(msg,type='info'){
+    const el=document.getElementById('status-msg'); el.textContent=msg; el.className='status-msg '+type; el.style.display='block';
+  }
+  function hideStatus(){document.getElementById('status-msg').style.display='none';}
+</script>
 
 </body>
 </html>
