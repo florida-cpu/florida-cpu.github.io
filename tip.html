@@ -435,3 +435,18 @@
           subtotal_cents:Math.round(subtotal*100),
           tip_cents:Math.round(tipAmount*100),
           subtotal:subtotal.toFixed(2),
+          tip:tipAmount.toFixed(2),
+          total:total.toFixed(2)
+        })
+      });
+      if(!response.ok) throw new Error(await response.text());
+      window.location.href=`https://buy.stripe.com/28E14n13F4jY0d0fZdfUQ1f?prefilled_total=${total.toFixed(2)}`;
+    }catch(e){ showStatus(e.message,'error'); setLoading(false); }
+  }
+  function setLoading(b){ const btn=document.getElementById('pay-btn'); btn.classList.toggle('loading',b); btn.disabled=b; }
+  function showStatus(msg,type){ const s=document.getElementById('status-msg'); s.textContent=msg; s.className='status-msg '+type; s.style.display='block'; }
+  function hideStatus(){ const s=document.getElementById('status-msg'); s.style.display='none'; }
+</script>
+
+</body>
+</html>
