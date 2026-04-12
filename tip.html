@@ -1,3 +1,6 @@
+Tip · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -348,12 +351,36 @@
  
   function payStripe(){
     const total = (subtotal + tipAmount).toFixed(2);
-    const stripeLink = `https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv?amount=${Math.round(total*100)}`;
-    window.location.href = stripeLink;
+    const tipAmt = tipAmount.toFixed(2);
+    const sub = subtotal.toFixed(2);
+ 
+    fetch('https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subtotal: sub,
+        tip: tipAmt,
+        total: total,
+        amount: Math.round(total * 100)
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Payment error. Please try again.');
+      }
+    })
+    .catch(() => {
+      alert('Connection error. Please try again.');
+    });
   }
  
   initAmounts();
 </script>
 </body>
+</html>
+ 
 </html>
  
