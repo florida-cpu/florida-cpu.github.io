@@ -347,14 +347,51 @@
   }
  
   function payStripe(){
-    const total = (subtotal + tipAmount).toFixed(2);
-    const stripeLink = `https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv?amount=${Math.round(total*100)}`;
-    window.location.href = stripeLink;
+    const total = parseFloat((subtotal + tipAmount).toFixed(2));
+    const btn = document.querySelector('.pay-btn');
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+ 
+    fetch('https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        tip: parseFloat(tipAmount.toFixed(2)),
+        total: total,
+        amount: Math.round(total * 100)
+      })
+    })
+    .then(res => res.text())
+    .then(text => {
+      try {
+        const data = JSON.parse(text);
+        if (data.url) {
+          window.location.href = data.url;
+        } else if (data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          window.location.href = text.trim();
+        }
+      } catch(e) {
+        if (text && text.startsWith('http')) {
+          window.location.href = text.trim();
+        } else {
+          btn.textContent = 'Proceed to Payment →';
+          btn.disabled = false;
+          alert('Payment error. Please try again.');
+        }
+      }
+    })
+    .catch(() => {
+      btn.textContent = 'Proceed to Payment →';
+      btn.disabled = false;
+      alert('Connection error. Please try again.');
+    });
   }
  
   initAmounts();
 </script>
 </body>
 </html>
-</body>
-</html>
+ 
