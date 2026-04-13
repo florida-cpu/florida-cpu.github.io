@@ -32,16 +32,16 @@ button.pay-btn:hover{background:#162048;}
 </style>
 </head>
 <body>
- 
+
 <div class="header">
   <h1>Muscle for Hire Movers</h1>
   <p>Add a tip and pay securely</p>
 </div>
- 
+
 <div class="container">
   <div class="card">
     <div id="subtotal-display" style="font-size:1rem;font-weight:600;margin-bottom:15px;">Subtotal: $0.00</div>
- 
+
     <button class="tip-btn" onclick="selectTip(0.20, this)" id="tip-20">
       <span>20%</span>
       <span class="tip-dollar" id="amt-20">$0.00</span>
@@ -54,47 +54,47 @@ button.pay-btn:hover{background:#162048;}
       <span>30%</span>
       <span class="tip-dollar" id="amt-30">$0.00</span>
     </button>
- 
+
     <button class="custom-tip-btn" id="btn-custom" onclick="toggleCustom()">+ Custom tip amount</button>
     <div class="custom-input-wrap" id="custom-wrap">
       <span class="dollar-sign">$</span>
       <input type="number" id="custom-amount" placeholder="0.00" min="0" step="0.01" oninput="onCustomInput()">
     </div>
- 
+
     <button class="tip-btn" onclick="selectTip(0, this)" id="tip-none">
       <span>No Tip</span>
     </button>
- 
+
     <div id="total-display">Total: $0.00</div>
     <button class="pay-btn" onclick="payStripe()">Proceed to Payment</button>
   </div>
 </div>
- 
+
 <script>
 let urlParams = new URLSearchParams(window.location.search);
 let subtotal = parseFloat(urlParams.get('subtotal') || '0');
 let tipAmount = 0;
- 
+
 document.getElementById('subtotal-display').textContent = 'Subtotal: $' + subtotal.toFixed(2);
 document.getElementById('amt-20').textContent = '$' + (subtotal * 0.20).toFixed(2);
 document.getElementById('amt-25').textContent = '$' + (subtotal * 0.25).toFixed(2);
 document.getElementById('amt-30').textContent = '$' + (subtotal * 0.30).toFixed(2);
 updateTotal();
- 
+
 function clearActive() {
   document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('btn-custom').classList.remove('active');
   document.getElementById('custom-wrap').classList.remove('visible');
   document.getElementById('custom-amount').value = '';
 }
- 
+
 function selectTip(pct, el) {
   clearActive();
   tipAmount = subtotal * pct;
   el.classList.add('active');
   updateTotal();
 }
- 
+
 function toggleCustom() {
   const isOpen = document.getElementById('custom-wrap').classList.contains('visible');
   clearActive();
@@ -106,17 +106,17 @@ function toggleCustom() {
     updateTotal();
   }
 }
- 
+
 function onCustomInput() {
   const val = parseFloat(document.getElementById('custom-amount').value);
   tipAmount = isNaN(val) ? 0 : Math.max(0, val);
   updateTotal();
 }
- 
+
 function updateTotal() {
   document.getElementById('total-display').textContent = 'Total: $' + (subtotal + tipAmount).toFixed(2);
 }
- 
+
 function payStripe(){
   const total = (subtotal + tipAmount).toFixed(2);
   // Replace with your Stripe Checkout URL or webhook link for actual payment
@@ -124,9 +124,6 @@ function payStripe(){
   window.location.href = stripeLink;
 }
 </script>
- 
+
 </body>
 </html>
- 
-</html>
- 
