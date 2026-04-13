@@ -13,13 +13,21 @@ body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:
 .header p{font-size:0.85rem;color:#8fa3d4;}
 .container{width:100%;max-width:500px;display:flex;flex-direction:column;gap:15px;}
 .card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8ecf4;}
-.tip-btn{width:100%;padding:14px;border-radius:12px;margin-bottom:10px;border:1px solid #e8ecf4;background:#f4f6f9;font-size:16px;font-weight:600;cursor:pointer;text-align:center;}
+.tip-btn{width:100%;padding:14px;border-radius:12px;margin-bottom:10px;border:2px solid #e8ecf4;background:#f4f6f9;font-size:16px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
+.tip-btn:hover{border-color:#1a2b5e;background:#edf0f8;}
 .tip-btn.active{background:#1a2b5e;color:#fff;border-color:#1a2b5e;}
 .tip-btn span{display:block;}
-#custom-amount{width:100%;padding:10px;border-radius:10px;border:1.5px solid #e8ecf4;background:#f4f6f9;font-size:15px;margin-bottom:10px;outline:none;}
-#custom-amount:focus{border-color:#1a2b5e;background:#fff;}
+.tip-btn .tip-dollar{font-size:13px;font-weight:500;opacity:0.75;margin-top:3px;}
+.tip-btn.active .tip-dollar{opacity:0.85;}
+.custom-tip-btn{width:100%;padding:14px;border-radius:12px;margin-bottom:10px;border:2px dashed #d0d8ea;background:#f8f9fc;font-size:15px;font-weight:600;cursor:pointer;text-align:center;color:#6b7a99;transition:all 0.15s;}
+.custom-tip-btn:hover{border-color:#1a2b5e;color:#1a2b5e;background:#edf0f8;}
+.custom-tip-btn.active{border-color:#1a2b5e;border-style:solid;color:#1a2b5e;background:#edf0f8;}
+.custom-input-wrap{display:none;margin-bottom:10px;position:relative;}
+.custom-input-wrap.visible{display:block;}
+.custom-input-wrap .dollar-sign{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;font-weight:700;color:#1a2b5e;pointer-events:none;}
+#custom-amount{width:100%;padding:12px 14px 12px 28px;border-radius:10px;border:2px solid #1a2b5e;background:#fff;font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;color:#1a1a2e;outline:none;}
 #total-display{font-size:1.25rem;font-weight:700;margin-top:10px;text-align:center;}
-button.pay-btn{width:100%;padding:14px;background:#1a2b5e;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;}
+button.pay-btn{width:100%;padding:14px;background:#1a2b5e;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
 button.pay-btn:hover{background:#162048;}
 </style>
 </head>
@@ -32,15 +40,31 @@ button.pay-btn:hover{background:#162048;}
 
 <div class="container">
   <div class="card">
-    <div id="subtotal-display">Subtotal: $0.00</div>
+    <div id="subtotal-display" style="font-size:1rem;font-weight:600;margin-bottom:15px;">Subtotal: $0.00</div>
 
-    <button class="tip-btn" onclick="selectTip(0.2)" id="tip-20"><span>20%</span></button>
-    <button class="tip-btn" onclick="selectTip(0.25)" id="tip-25"><span>25%</span></button>
-    <button class="tip-btn" onclick="selectTip(0.3)" id="tip-30"><span>30%</span></button>
-    <button class="tip-btn" onclick="selectTip(0)" id="tip-none"><span>No Tip</span></button>
+    <button class="tip-btn" onclick="selectTip(0.20, this)" id="tip-20">
+      <span>20%</span>
+      <span class="tip-dollar" id="amt-20">$0.00</span>
+    </button>
+    <button class="tip-btn" onclick="selectTip(0.25, this)" id="tip-25">
+      <span>25%</span>
+      <span class="tip-dollar" id="amt-25">$0.00</span>
+    </button>
+    <button class="tip-btn" onclick="selectTip(0.30, this)" id="tip-30">
+      <span>30%</span>
+      <span class="tip-dollar" id="amt-30">$0.00</span>
+    </button>
 
-    <input type="number" id="custom-amount" placeholder="Custom tip" step="0.01" style="display:none;">
-    
+    <button class="custom-tip-btn" id="btn-custom" onclick="toggleCustom()">+ Custom tip amount</button>
+    <div class="custom-input-wrap" id="custom-wrap">
+      <span class="dollar-sign">$</span>
+      <input type="number" id="custom-amount" placeholder="0.00" min="0" step="0.01" oninput="onCustomInput()">
+    </div>
+
+    <button class="tip-btn" onclick="selectTip(0, this)" id="tip-none">
+      <span>No Tip</span>
+    </button>
+
     <div id="total-display">Total: $0.00</div>
     <button class="pay-btn" onclick="payStripe()">Proceed to Payment</button>
   </div>
@@ -52,41 +76,50 @@ let subtotal = parseFloat(urlParams.get('subtotal') || '0');
 let tipAmount = 0;
 
 document.getElementById('subtotal-display').textContent = 'Subtotal: $' + subtotal.toFixed(2);
-document.getElementById('total-display').textContent = 'Total: $' + subtotal.toFixed(2);
+document.getElementById('amt-20').textContent = '$' + (subtotal * 0.20).toFixed(2);
+document.getElementById('amt-25').textContent = '$' + (subtotal * 0.25).toFixed(2);
+document.getElementById('amt-30').textContent = '$' + (subtotal * 0.30).toFixed(2);
+updateTotal();
 
-function selectTip(pct) {
+function clearActive() {
+  document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn-custom').classList.remove('active');
+  document.getElementById('custom-wrap').classList.remove('visible');
+  document.getElementById('custom-amount').value = '';
+}
+
+function selectTip(pct, el) {
+  clearActive();
   tipAmount = subtotal * pct;
-  document.querySelectorAll('.tip-btn').forEach(btn=>btn.classList.remove('active'));
-  document.getElementById('custom-amount').style.display = 'none';
-  
-  if(pct === 0 && event.target.id!=='tip-none'){
-    document.getElementById('tip-none').classList.add('active');
-  } else if(event.target.id==='tip-none'){
-    event.target.classList.add('active');
-  } else {
-    event.target.classList.add('active');
-  }
-
-  if(event.target.id==='tip-custom'){
-    document.getElementById('custom-amount').style.display='block';
-    tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
-  }
+  el.classList.add('active');
   updateTotal();
 }
 
-document.getElementById('custom-amount').addEventListener('input',()=>{
-  tipAmount = parseFloat(document.getElementById('custom-amount').value||0);
-  updateTotal();
-});
+function toggleCustom() {
+  const isOpen = document.getElementById('custom-wrap').classList.contains('visible');
+  clearActive();
+  if (!isOpen) {
+    document.getElementById('btn-custom').classList.add('active');
+    document.getElementById('custom-wrap').classList.add('visible');
+    document.getElementById('custom-amount').focus();
+    tipAmount = 0;
+    updateTotal();
+  }
+}
 
-function updateTotal(){
+function onCustomInput() {
+  const val = parseFloat(document.getElementById('custom-amount').value);
+  tipAmount = isNaN(val) ? 0 : Math.max(0, val);
+  updateTotal();
+}
+
+function updateTotal() {
   document.getElementById('total-display').textContent = 'Total: $' + (subtotal + tipAmount).toFixed(2);
 }
 
 function payStripe(){
   const total = (subtotal + tipAmount).toFixed(2);
-  // Replace with your Stripe Checkout URL or webhook link for actual payment
-  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${Math.round(total*100)}`;
+  const stripeLink = `https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv?amount=${Math.round(total*100)}`;
   window.location.href = stripeLink;
 }
 </script>
