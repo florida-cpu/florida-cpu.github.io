@@ -1,3 +1,6 @@
+Index · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,248 +12,86 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f4f6f9;
-      color: #1a1a2e;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 0 3rem;
-    }
- 
-    /* HEADER */
-    .header {
-      width: 100%;
-      background: #1a2b5e;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-    .header-icon {
-      width: 40px; height: 40px;
-      background: #fff;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
+    body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 0 0 3rem; }
+    .header { width: 100%; background: #1a2b5e; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1.75rem; }
+    .header-icon { width: 40px; height: 40px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .header-text { color: #fff; }
     .header-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
     .header-sub { font-size: 0.72rem; color: #8fa3d4; letter-spacing: 0.05em; text-transform: uppercase; }
- 
-    /* LAYOUT */
-    .outer {
-      width: 100%;
-      max-width: 860px;
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 1rem;
-      align-items: start;
-    }
- 
-    /* CARD */
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 1.5rem;
-      border: 1px solid #e8ecf4;
-      margin-bottom: 1rem;
-    }
+    .outer { width: 100%; max-width: 860px; padding: 0 1rem; display: grid; grid-template-columns: 1fr 320px; gap: 1rem; align-items: start; }
+    .card { background: #fff; border-radius: 16px; padding: 1.5rem; border: 1px solid #e8ecf4; margin-bottom: 1rem; }
     .card:last-child { margin-bottom: 0; }
- 
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #1a2b5e;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
- 
-    .badge {
-      display: inline-block;
-      background: #edf0f8;
-      color: #1a2b5e;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
- 
-    /* FIELDS */
+    .section-label { font-size: 0.7rem; font-weight: 600; color: #1a2b5e; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+    .badge { display: inline-block; background: #edf0f8; color: #1a2b5e; font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.75rem; margin-right: 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .badge-truck { background: #e8f4ec; color: #1a6b3c; }
     .field { margin-bottom: 1.1rem; }
     .field:last-child { margin-bottom: 0; }
- 
-    label {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #1a2b5e;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
- 
-    input[type="number"], select {
-      width: 100%;
-      background: #f4f6f9;
-      border: 1.5px solid #e8ecf4;
-      border-radius: 10px;
-      color: #1a1a2e;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      padding: 0.85rem 1rem;
-      outline: none;
-      transition: border-color 0.15s, background 0.15s;
-      -webkit-appearance: none; appearance: none;
-    }
-    input[type="number"]:focus, select:focus {
-      border-color: #1a2b5e; background: #fff;
-    }
+    label { display: block; font-size: 0.7rem; font-weight: 600; color: #1a2b5e; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    input[type="number"], select { width: 100%; background: #f4f6f9; border: 1.5px solid #e8ecf4; border-radius: 10px; color: #1a1a2e; font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.85rem 1rem; outline: none; transition: border-color 0.15s, background 0.15s; -webkit-appearance: none; appearance: none; }
+    input[type="number"]:focus, select:focus { border-color: #1a2b5e; background: #fff; }
     input[type="number"]::placeholder { color: #b0bbd4; }
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%236b7a99' d='M6 7L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 14px center;
-      padding-right: 36px; cursor: pointer;
-    }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%236b7a99' d='M6 7L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
     select option { background: #fff; color: #1a1a2e; }
- 
-    /* STEPPER */
-    .stepper {
-      display: flex; align-items: stretch;
-      border: 1.5px solid #e8ecf4; border-radius: 10px; overflow: hidden;
-    }
-    .stepper button {
-      width: 48px; background: #f4f6f9; border: none;
-      color: #1a2b5e; font-size: 20px; cursor: pointer;
-      transition: background 0.15s, color 0.15s; flex-shrink: 0;
-      font-weight: 600;
-    }
+    .stepper { display: flex; align-items: stretch; border: 1.5px solid #e8ecf4; border-radius: 10px; overflow: hidden; }
+    .stepper button { width: 48px; background: #f4f6f9; border: none; color: #1a2b5e; font-size: 20px; cursor: pointer; transition: background 0.15s, color 0.15s; flex-shrink: 0; font-weight: 600; }
     .stepper button:hover { background: #1a2b5e; color: #fff; }
-    .stepper input {
-      flex: 1; border: none;
-      border-left: 1.5px solid #e8ecf4;
-      border-right: 1.5px solid #e8ecf4;
-      border-radius: 0; background: #fff;
-      text-align: center; font-size: 1rem;
-      padding: 0.85rem 8px; color: #1a1a2e;
-      font-family: 'Inter', sans-serif; font-weight: 600;
-    }
+    .stepper input { flex: 1; border: none; border-left: 1.5px solid #e8ecf4; border-right: 1.5px solid #e8ecf4; border-radius: 0; background: #fff; text-align: center; font-size: 1rem; padding: 0.85rem 8px; color: #1a1a2e; font-family: 'Inter', sans-serif; font-weight: 600; }
     .stepper input:focus { box-shadow: none; outline: none; }
- 
-    .hours-meta {
-      font-size: 0.72rem; color: #6b7a99; margin-top: 6px;
-      display: flex; justify-content: space-between;
-    }
+    .hours-meta { font-size: 0.72rem; color: #6b7a99; margin-top: 6px; display: flex; justify-content: space-between; }
     .hours-meta em { font-style: normal; color: #1a2b5e; font-weight: 600; }
- 
+    .truck-toggle { display: flex; align-items: center; gap: 0.75rem; background: #f4f6f9; border: 1.5px solid #e8ecf4; border-radius: 10px; padding: 0.85rem 1rem; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
+    .truck-toggle:hover { border-color: #1a2b5e; }
+    .truck-toggle.active { background: #e8f4ec; border-color: #1a6b3c; }
+    .truck-toggle-switch { width: 38px; height: 22px; background: #d0d8e8; border-radius: 11px; position: relative; flex-shrink: 0; transition: background 0.2s; }
+    .truck-toggle.active .truck-toggle-switch { background: #1a6b3c; }
+    .truck-toggle-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: left 0.2s; }
+    .truck-toggle.active .truck-toggle-knob { left: 19px; }
+    .truck-toggle-label { flex: 1; }
+    .truck-toggle-title { font-size: 0.9rem; font-weight: 600; color: #1a1a2e; }
+    .truck-toggle-sub { font-size: 0.72rem; color: #6b7a99; margin-top: 1px; }
+    .truck-toggle.active .truck-toggle-sub { color: #1a6b3c; }
+    .truck-toggle-price { font-size: 0.9rem; font-weight: 700; color: #1a2b5e; }
+    .truck-toggle.active .truck-toggle-price { color: #1a6b3c; }
+    .mileage-section { display: none; margin-top: 0.75rem; padding: 1rem; background: #f0f8f3; border: 1.5px solid #c3e0ce; border-radius: 10px; }
+    .mileage-section.visible { display: block; }
+    .mileage-section label { color: #1a6b3c; }
+    .mileage-section input { background: #fff; border-color: #c3e0ce; }
+    .mileage-section input:focus { border-color: #1a6b3c; }
+    .mileage-note { font-size: 0.72rem; color: #1a6b3c; margin-top: 0.5rem; }
     .promo-row { display: flex; gap: 0.5rem; }
     .promo-row select { flex: 0 0 130px; }
     .promo-row input { flex: 1; }
- 
-    /* BREAKDOWN */
-    .breakdown {
-      background: #f4f6f9;
-      border: 1px solid #e8ecf4;
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-      margin-top: 1.25rem;
-    }
-    .amount-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.5rem 0; border-bottom: 1px solid #edf0f8;
-      font-size: 0.88rem;
-    }
+    .breakdown { background: #f4f6f9; border: 1px solid #e8ecf4; border-radius: 12px; padding: 1rem 1.1rem; margin-top: 1.25rem; }
+    .amount-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #edf0f8; font-size: 0.88rem; }
     .amount-row:last-of-type { border-bottom: none; }
     .amount-label { color: #6b7a99; }
     .amount-value { color: #1a1a2e; font-weight: 500; }
     .amount-value.discount { color: #c0392b; }
- 
-    .total-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.9rem 0 0; margin-top: 0.4rem;
-      border-top: 2px solid #1a2b5e;
-    }
+    .amount-value.truck-val { color: #1a6b3c; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 0 0; margin-top: 0.4rem; border-top: 2px solid #1a2b5e; }
     .total-label { font-size: 1rem; font-weight: 600; color: #1a1a2e; }
     .total-value { font-size: 1.6rem; font-weight: 700; color: #1a2b5e; letter-spacing: -0.02em; }
- 
-    /* GENERATE BUTTON */
-    .btn-gen {
-      width: 100%; margin-top: 1.25rem; padding: 1.05rem;
-      background: #1a2b5e; border: none; border-radius: 12px;
-      color: #fff; font-family: 'Inter', sans-serif;
-      font-size: 1rem; font-weight: 700; cursor: pointer;
-      transition: background 0.15s, transform 0.1s; letter-spacing: -0.01em;
-    }
+    .btn-gen { width: 100%; margin-top: 1.25rem; padding: 1.05rem; background: #1a2b5e; border: none; border-radius: 12px; color: #fff; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s, transform 0.1s; letter-spacing: -0.01em; }
     .btn-gen:hover { background: #253f8a; transform: scale(0.99); }
     .btn-gen:active { transform: scale(0.97); }
- 
-    /* RIGHT COL */
     .right-col { display: flex; flex-direction: column; position: sticky; top: 24px; }
- 
-    /* QR EMPTY */
-    .qr-empty {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 2.5rem 1.25rem;
-      text-align: center; gap: 0.75rem;
-    }
+    .qr-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1.25rem; text-align: center; gap: 0.75rem; }
     .qr-empty .icon { font-size: 44px; opacity: 0.12; }
     .qr-empty p { font-size: 0.82rem; color: #6b7a99; line-height: 1.65; }
- 
     .qr-ready { display: none; flex-direction: column; align-items: center; padding: 1.5rem; gap: 1rem; }
     #qrcode { display: none; }
-    #qrcode canvas, #qrcode img {
-      width: 180px !important; height: 180px !important;
-      border-radius: 8px; padding: 8px; background: #fff; display: block;
-      border: 1px solid #e8ecf4;
-    }
-    .qr-badge {
-      font-size: 0.72rem; font-weight: 600;
-      background: #edf0f8; color: #1a2b5e;
-      padding: 0.25rem 0.85rem; border-radius: 20px;
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
+    #qrcode canvas, #qrcode img { width: 180px !important; height: 180px !important; border-radius: 8px; padding: 8px; background: #fff; display: block; border: 1px solid #e8ecf4; }
+    .qr-badge { font-size: 0.72rem; font-weight: 600; background: #edf0f8; color: #1a2b5e; padding: 0.25rem 0.85rem; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
     .qr-hint { font-size: 0.78rem; color: #6b7a99; text-align: center; line-height: 1.6; }
- 
-    /* URL CARD */
     #url-card { display: none; }
     .url-field { display: flex; gap: 0.5rem; }
-    .url-text {
-      flex: 1; background: #f4f6f9; border: 1.5px solid #e8ecf4;
-      border-radius: 10px; padding: 0.75rem 0.9rem;
-      font-size: 0.72rem; color: #6b7a99;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .btn-copy {
-      padding: 0.75rem 1rem; background: #f4f6f9;
-      border: 1.5px solid #e8ecf4; border-radius: 10px;
-      color: #1a1a2e; font-family: 'Inter', sans-serif;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      white-space: nowrap; transition: background 0.15s;
-    }
+    .url-text { flex: 1; background: #f4f6f9; border: 1.5px solid #e8ecf4; border-radius: 10px; padding: 0.75rem 0.9rem; font-size: 0.72rem; color: #6b7a99; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-copy { padding: 0.75rem 1rem; background: #f4f6f9; border: 1.5px solid #e8ecf4; border-radius: 10px; color: #1a1a2e; font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
     .btn-copy:hover { background: #1a2b5e; border-color: #1a2b5e; color: #fff; }
     .btn-copy.copied { background: #1a8c5b; border-color: #1a8c5b; color: #fff; }
- 
-    .preview-link {
-      display: inline-block; margin-top: 0.75rem;
-      font-size: 0.78rem; color: #1a2b5e; text-decoration: none;
-      font-weight: 600; letter-spacing: 0.02em;
-    }
+    .preview-link { display: inline-block; margin-top: 0.75rem; font-size: 0.78rem; color: #1a2b5e; text-decoration: none; font-weight: 600; letter-spacing: 0.02em; }
     .preview-link:hover { color: #253f8a; text-decoration: underline; }
- 
-    @media (max-width: 720px) {
-      .outer { grid-template-columns: 1fr; }
-      .right-col { position: static; }
-    }
+    @media (max-width: 720px) { .outer { grid-template-columns: 1fr; } .right-col { position: static; } }
   </style>
 </head>
 <body>
@@ -264,12 +105,11 @@
 </div>
  
 <div class="outer">
- 
-  <!-- LEFT -->
   <div>
     <div class="card">
       <p class="section-label">Job Details</p>
-      <span class="badge">$50 / hr per mover</span>
+      <span class="badge">$60 / hr per mover</span>
+      <span class="badge badge-truck">Truck +$60 / hr</span>
  
       <div class="field">
         <label>Number of Movers</label>
@@ -294,6 +134,25 @@
       </div>
  
       <div class="field">
+        <label>Truck</label>
+        <div class="truck-toggle" id="truck-toggle" onclick="toggleTruck()">
+          <div class="truck-toggle-switch">
+            <div class="truck-toggle-knob"></div>
+          </div>
+          <div class="truck-toggle-label">
+            <div class="truck-toggle-title">Include truck</div>
+            <div class="truck-toggle-sub" id="truck-sub">Tap to add truck to this job</div>
+          </div>
+          <div class="truck-toggle-price">$60/hr</div>
+        </div>
+        <div class="mileage-section" id="mileage-section">
+          <label>Distance (miles)</label>
+          <input type="number" id="miles" value="0" min="0" step="1" placeholder="0" oninput="recalc()" />
+          <p class="mileage-note">First 25 miles free · $2/mi (truck) + $1/mi per mover after that</p>
+        </div>
+      </div>
+ 
+      <div class="field">
         <label>Travel Fee ($)</label>
         <input type="number" id="travel" value="0" min="0" step="5" placeholder="0.00" oninput="recalc()" />
       </div>
@@ -312,8 +171,16 @@
  
       <div class="breakdown">
         <div class="amount-row">
-          <span class="amount-label" id="labor-label">Labor (2 movers × 2.00 hrs × $50)</span>
-          <span class="amount-value" id="bd-labor">$200.00</span>
+          <span class="amount-label" id="labor-label">Labor (2 movers × 2.00 hrs × $60)</span>
+          <span class="amount-value" id="bd-labor">$240.00</span>
+        </div>
+        <div class="amount-row" id="bd-truck-row" style="display:none;">
+          <span class="amount-label" id="truck-label">Truck (2.00 hrs × $60)</span>
+          <span class="amount-value truck-val" id="bd-truck">$120.00</span>
+        </div>
+        <div class="amount-row" id="bd-mile-row" style="display:none;">
+          <span class="amount-label" id="mile-label">Mileage</span>
+          <span class="amount-value truck-val" id="bd-mile">$0.00</span>
         </div>
         <div class="amount-row">
           <span class="amount-label">Travel fee</span>
@@ -325,7 +192,7 @@
         </div>
         <div class="total-row">
           <span class="total-label">Subtotal</span>
-          <span class="total-value" id="bd-subtotal">$200.00</span>
+          <span class="total-value" id="bd-subtotal">$240.00</span>
         </div>
       </div>
  
@@ -333,105 +200,131 @@
     </div>
   </div>
  
-  <!-- RIGHT -->
   <div class="right-col">
- 
     <div class="card">
       <p class="section-label">Tip Page QR Code</p>
- 
       <div class="qr-empty" id="qr-empty">
         <div class="icon">▪</div>
         <p>Click <strong style="color:#1a1a2e">Generate Tip Link</strong> to create a QR code your customer can scan to tip and pay.</p>
       </div>
- 
       <div class="qr-ready" id="qr-ready">
         <div id="qrcode"></div>
         <div class="qr-badge" id="qr-badge">Subtotal: $0.00</div>
         <p class="qr-hint">Customer scans to choose a tip<br/>and complete payment.</p>
       </div>
     </div>
- 
     <div class="card" id="url-card">
       <p class="section-label">Tip Page URL</p>
       <div class="url-field">
         <div class="url-text" id="url-display">—</div>
         <button class="btn-copy" id="copy-btn" onclick="copyUrl()">Copy</button>
       </div>
-      <p style="font-size:0.72rem;color:#6b7a99;margin-top:0.6rem;line-height:1.6;">
-        Send this link or open it on the customer's device.
-      </p>
+      <p style="font-size:0.72rem;color:#6b7a99;margin-top:0.6rem;line-height:1.6;">Send this link or open it on the customer's device.</p>
       <a class="preview-link" id="open-tip-link" href="#" target="_blank">↗ Open Tip Page</a>
     </div>
- 
   </div>
 </div>
  
 <script>
-  let currentSubtotal = 0, generatedUrl = '';
- 
-  const fmt   = n  => '$' + n.toFixed(2);
-  const pNum  = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
-  const toHR  = h  => { const hrs = Math.floor(h), min = Math.round((h-hrs)*60); if(!hrs) return `${min} min`; if(!min) return `${hrs} hr${hrs!==1?'s':''}`; return `${hrs} hr${hrs!==1?'s':''} ${min} min`; };
+  let currentSubtotal = 0, generatedUrl = '', truckOn = false;
+  const fmt  = n  => '$' + n.toFixed(2);
+  const pNum = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
+  const toHR = h  => { const hrs = Math.floor(h), min = Math.round((h-hrs)*60); if(!hrs) return `${min} min`; if(!min) return `${hrs} hr${hrs!==1?'s':''}`; return `${hrs} hr${hrs!==1?'s':''} ${min} min`; };
  
   function adjustMovers(d) { const e=document.getElementById('movers'); e.value=Math.max(1,Math.min(10,+e.value+d)); recalc(); }
   function adjustHours(d)  { const e=document.getElementById('hours');  e.value=Math.max(0.25,Math.min(24,Math.round((+e.value+d)*4)/4)).toFixed(2); recalc(); }
  
+  function toggleTruck() {
+    truckOn = !truckOn;
+    const tog = document.getElementById('truck-toggle');
+    const sec = document.getElementById('mileage-section');
+    tog.classList.toggle('active', truckOn);
+    sec.classList.toggle('visible', truckOn);
+    document.getElementById('truck-sub').textContent = truckOn ? 'Truck added to this job' : 'Tap to add truck to this job';
+    recalc();
+  }
+ 
   function recalc() {
-    const m=pNum('movers')||1, h=pNum('hours')||0.25, tr=pNum('travel'), pt=document.getElementById('promo-type').value, pv=pNum('promo-val');
-    const labor=m*h*50;
-    let disc=pt==='flat'?Math.min(pv,labor+tr):pt==='percent'?(labor+tr)*pv/100:0;
-    disc=Math.max(0,disc);
-    currentSubtotal=Math.max(0,labor+tr-disc);
+    const m  = pNum('movers') || 1;
+    const h  = pNum('hours')  || 0.25;
+    const tr = pNum('travel');
+    const pt = document.getElementById('promo-type').value;
+    const pv = pNum('promo-val');
+    const mi = truckOn ? (pNum('miles') || 0) : 0;
+    const labor = m * h * 60;
+    const truck = truckOn ? h * 60 : 0;
+    const overMiles  = Math.max(0, mi - 25);
+    const mileCharge = truckOn && overMiles > 0 ? overMiles * (2 + m) : 0;
+    const mileRate   = 2 + m;
+    const beforeDisc = labor + truck + mileCharge + tr;
+    let disc = pt==='flat' ? Math.min(pv, beforeDisc) : pt==='percent' ? beforeDisc * pv / 100 : 0;
+    disc = Math.max(0, disc);
+    currentSubtotal = Math.max(0, beforeDisc - disc);
  
     document.getElementById('hours-readable').textContent = toHR(h);
-    document.getElementById('labor-label').textContent    = `Labor (${m} mover${m!==1?'s':''} × ${h.toFixed(2)} hrs × $50)`;
+    document.getElementById('labor-label').textContent    = `Labor (${m} mover${m!==1?'s':''} × ${h.toFixed(2)} hrs × $60)`;
     document.getElementById('bd-labor').textContent       = fmt(labor);
     document.getElementById('bd-travel').textContent      = fmt(tr);
     document.getElementById('bd-subtotal').textContent    = fmt(currentSubtotal);
  
+    const trRow = document.getElementById('bd-truck-row');
+    if (truckOn) {
+      trRow.style.display = 'flex';
+      document.getElementById('truck-label').textContent = `Truck (${h.toFixed(2)} hrs × $60)`;
+      document.getElementById('bd-truck').textContent    = fmt(truck);
+    } else { trRow.style.display = 'none'; }
+ 
+    const miRow = document.getElementById('bd-mile-row');
+    if (truckOn && mi > 0) {
+      miRow.style.display = 'flex';
+      if (overMiles <= 0) {
+        document.getElementById('mile-label').textContent = `Mileage (${mi} mi — within free zone)`;
+        document.getElementById('bd-mile').textContent    = '$0.00';
+      } else {
+        document.getElementById('mile-label').textContent = `Mileage (${overMiles} mi × $${mileRate})`;
+        document.getElementById('bd-mile').textContent    = fmt(mileCharge);
+      }
+    } else { miRow.style.display = 'none'; }
+ 
     const pr = document.getElementById('bd-promo-row');
     if (pt !== 'none' && disc > 0) {
-      pr.style.display='flex';
-      document.getElementById('bd-promo-label').textContent = pt==='percent'?`Promo (${pv}%)`:'Promo (flat)';
-      document.getElementById('bd-promo').textContent = `−${fmt(disc)}`;
-    } else { pr.style.display='none'; }
+      pr.style.display = 'flex';
+      document.getElementById('bd-promo-label').textContent = pt==='percent' ? `Promo (${pv}%)` : 'Promo (flat)';
+      document.getElementById('bd-promo').textContent       = `−${fmt(disc)}`;
+    } else { pr.style.display = 'none'; }
   }
  
   function buildTipUrl(sub) {
-    const base = window.location.href.split('?')[0].replace(/index\.html$/,'');
-    return (base.endsWith('/')?base:base+'/') + `tip.html?subtotal=${sub.toFixed(2)}`;
+    const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
+    return (base.endsWith('/') ? base : base + '/') + `tip.html?subtotal=${sub.toFixed(2)}`;
   }
  
   function generateQR() {
     recalc();
     const url = buildTipUrl(currentSubtotal);
     generatedUrl = url;
- 
     document.getElementById('qr-empty').style.display  = 'none';
     document.getElementById('qr-ready').style.display  = 'flex';
     document.getElementById('url-card').style.display  = 'block';
     document.getElementById('qr-badge').textContent    = `Subtotal: $${currentSubtotal.toFixed(2)}`;
     document.getElementById('url-display').textContent = url;
     document.getElementById('open-tip-link').href      = url;
- 
     const qrEl = document.getElementById('qrcode');
     qrEl.style.display = 'block';
     qrEl.innerHTML = '';
-    new QRCode(qrEl, { text:url, width:180, height:180, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H });
+    new QRCode(qrEl, { text: url, width: 180, height: 180, colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H });
   }
  
   function copyUrl() {
     if (!generatedUrl) return;
     navigator.clipboard.writeText(generatedUrl).then(() => {
       const b = document.getElementById('copy-btn');
-      b.textContent='✓ Copied'; b.classList.add('copied');
-      setTimeout(()=>{ b.textContent='Copy'; b.classList.remove('copied'); }, 2000);
+      b.textContent = '✓ Copied'; b.classList.add('copied');
+      setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('copied'); }, 2000);
     });
   }
  
   recalc();
 </script>
 </body>
-</html>
- 
 </html>
