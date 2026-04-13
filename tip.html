@@ -119,8 +119,7 @@ function updateTotal() {
 
 function payStripe(){
   const total = (subtotal + tipAmount).toFixed(2);
-  // Replace with your Stripe Checkout URL or webhook link for actual payment
-  const stripeLink = `https://buy.stripe.com/test_link_here?amount=${Math.round(total*100)}`;
+  const stripeLink = `https://hook.us2.make.com/biwwpm5olme1grp5zauee0wcw5yx4ziv?amount=${Math.round(total*100)}`;
   window.location.href = stripeLink;
 }
 </script>
