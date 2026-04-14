@@ -500,7 +500,7 @@
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount_cents:   totalCents,
+          amount_cents:   total,
           subtotal_cents: Math.round(subtotal * 100),
           tip_cents:      Math.round(tipAmount * 100),
           subtotal:       subtotal.toFixed(2),
