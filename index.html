@@ -296,7 +296,7 @@ Copy
  
   function buildTipUrl(sub) {
     const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
-    return (base.endsWith('/') ? base : base + '/') + `tip.html?subtotal=${Math.round(sub / 100)}`;
+    return (base.endsWith('/') ? base : base + '/') + `tip.html?subtotal=${Math.round(sub)}`;
   }
  
   function generateQR() {
