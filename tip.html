@@ -477,7 +477,7 @@
  
   async function handlePay() {
     const total      = subtotal + tipAmount;
-    const totalCents = Math.round(total);
+    const totalCents = Math.round(total * 100);
  
     if (totalCents < 50) {
       showStatus('Minimum charge is $0.50. Please add a tip or return to the calculator.', 'error');
@@ -500,9 +500,9 @@
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount_cents:   total,
-          subtotal_cents: Math.round(subtotal),
-          tip_cents:      Math.round(tipAmount),
+          amount_cents:   totalCents,
+          subtotal_cents: Math.round(subtotal * 100),
+          tip_cents:      Math.round(tipAmount * 100),
           subtotal:       subtotal.toFixed(2),
           tip:            tipAmount.toFixed(2),
           total:          total.toFixed(2),
